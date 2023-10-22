@@ -1,23 +1,21 @@
 "use client"
-
-import Sidebar from "@/app/(home)/components/sidebar"
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
 import {
     Sheet,
     SheetContent,
     SheetTrigger
-} from "../ui/sheet"
+} from "@/components/ui/sheet"
 
 
-export function SheetSide() {
+export function SheetSide({children,trigger}:{children:React.ReactNode,trigger:React.ReactNode}) {
     return (
 
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant="outline">open</Button>
+                {trigger}
             </SheetTrigger>
             <SheetContent side={"left"} className="p-0">
-                <Sidebar />
+                {children}
             </SheetContent>
         </Sheet>
 

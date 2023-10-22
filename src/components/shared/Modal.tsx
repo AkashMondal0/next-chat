@@ -8,26 +8,38 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { CommandDemo } from "./Command"
 
-export function DialogDemo() {
+interface ModalProps {
+    children: React.ReactNode
+    footer?: React.ReactNode
+    title: React.ReactNode
+    description?: React.ReactNode
+    trigger?: React.ReactNode
+}
+export function Modal({
+    children,
+    footer,
+    title,
+    description,
+    trigger
+}: ModalProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="secondary" className="border w-80">input</Button>
+                {trigger ? trigger : <Button variant="outline">open</Button>}
             </DialogTrigger>
             <DialogContent className="w-full">
                 <DialogHeader>
-                    <DialogTitle>Search profile</DialogTitle>
+                    <DialogTitle>
+                        {title}
+                    </DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when youre done.
+                        {description}
                     </DialogDescription>
                 </DialogHeader>
-                    <CommandDemo/>
+                {children}
                 <DialogFooter>
-                    <Button type="submit">Save changes</Button>
+                    {footer}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

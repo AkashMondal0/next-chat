@@ -12,9 +12,6 @@ import {
 } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UserNav } from "./user-nav"
-import { Input } from "@/components/ui/input"
-import { DialogTrigger } from "@/components/ui/dialog"
-import { DialogDemo } from "@/components/shared/Modal"
 
 export default function Sidebar({ data }: any) {
     return (
@@ -26,7 +23,6 @@ export default function Sidebar({ data }: any) {
                 </div>
                 <CardContent>
                     <div className="space-y-8">
-                        <DialogDemo/>
                         {Array(10).fill(10).map((sale: any) => (
                             <div className="flex items-center" key={sale}>
                                 <Avatar className="h-12 w-12">

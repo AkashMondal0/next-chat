@@ -1,13 +1,16 @@
 import { SheetSide } from '@/components/shared/Sheet';
-import { Card } from '@/components/ui/card';
 import {FC} from 'react';
+import Sidebar from './sidebar';
+import { Button } from '@/components/ui/button';
 
 interface ChatSectionProps {}
 const ChatSection:FC<ChatSectionProps> = () => {
   return (
     <>
       <h1>ChatSection</h1>
-      <SheetSide/>
+      <SheetSide trigger={<Button>open</Button>}>
+        <Sidebar/>
+      </SheetSide>
 
     </>
   );
