@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/provider/Theme_Provider'
 import { cn } from '@/lib/utils'
 import Auth0_Provider from '@/components/provider/Auth0_Provider'
+import React_Query from '@/components/provider/React-Query_Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +18,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  
+
 
   return (
     <html lang="en">
@@ -29,7 +30,9 @@ export default function RootLayout({
           attribute='class'
           storageKey="theme">
           <Auth0_Provider>
-            {children}
+            <React_Query>
+              {children}
+            </React_Query>
           </Auth0_Provider>
         </ThemeProvider>
       </body>

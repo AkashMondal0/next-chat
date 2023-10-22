@@ -1,16 +1,21 @@
+
 import getInitialProfile from "@/lib/user/initial-profile";
 import Sidebar from "@/app/(home)/components/sidebar";
 import ChatSection from "@/app/(home)/components/chat-section";
+import Home from "./home";
 
-export default async function index() {
-  const user = await getInitialProfile()
 
+
+export default async function Index() {
+  const profile = await getInitialProfile();
 
   return (
     <div className="flex">
       <div className="hidden sm:block">
-      <Sidebar />
+      {/* <Sidebar /> */}
+      {/* <Loader2 className='animate-spin text-zinc-500 ml-auto w-4 h-4' /> */}
       </div>
+      <Home/>
       <ChatSection />
     </div>
   );
