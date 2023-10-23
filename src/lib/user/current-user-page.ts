@@ -13,7 +13,9 @@ const getCurrentProfile = async () => {
             id: auth0_user?.user.sid
         }
     })
-
+    if (!user) {
+        return new Response("No User Found", { status: 404 });
+    }
     return user;
 }
 

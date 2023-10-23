@@ -29,8 +29,7 @@ export default function Home() {
 //     return <span>Error: {error.message}</span>
 //   }
 
-console.log(mutation.data)
-
+// console.log(getCurrentProfile)
 return (
     <div className="flex">
       {mutation.error && <span>Error: {mutation.error.message}</span>}

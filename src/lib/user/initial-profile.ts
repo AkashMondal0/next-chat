@@ -23,6 +23,7 @@ const getInitialProfile = async () => {
                 imageUrl: auth0_user.user.picture,
                 userId: auth0_user.user.sid,
                 phone: "",
+                status: "",
             }
         })
         return newUser
