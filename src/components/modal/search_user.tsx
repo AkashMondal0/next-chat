@@ -7,6 +7,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { User } from '@/interface/type';
 import useClientProfile from '@/hooks/client-profile';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { Users } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface SearchModalProps { }
 const SearchModal: FC<SearchModalProps> = () => {
@@ -24,7 +26,7 @@ const SearchModal: FC<SearchModalProps> = () => {
   })
 
 
-  return (<Modal title={"Search User"}>
+  return (<Modal title={"Search User"} trigger={<Button variant={"ghost"}><Users className='w-6 h-6 cursor-pointer'/></Button>}>
     <SearchCommand
       data={data?.filter(user => user.id !== auth0User?.sid)}
       status={status}
