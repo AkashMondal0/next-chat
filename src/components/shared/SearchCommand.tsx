@@ -14,6 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Loader2, UserCheck, UserPlus } from "lucide-react"
 import axios from "axios"
 import { useMutation, useQuery } from '@tanstack/react-query'
+import qs from "query-string"
+import useClientProfile from "@/hooks/client-profile"
 
 interface SearchCommandProps {
   data: User[] | undefined
@@ -55,13 +57,25 @@ export default function SearchCommand({
 
 
 const UserItem = ({ data }: { data: search_data_user }) => {
+
+  const currentProfile = useClientProfile()
+
   const postUser = async () => {
-    let data = await axios.post('/api/chat/direct/create')
-    return data
+    const url = qs.stringifyUrl({
+      url: "/api/chat/direct/create",
+      query: {
+        senderId: currentProfile.state.id
+      }
+    });
+    const receiverUser = {
+      id: data.id,
+      name: data.name,
+      image: data.imageUrl
+    }
+    let res = await axios.post(url, receiverUser)
+    return res
   }
   const mutation = useMutation({ mutationFn: postUser })
-
-  // console.log(mutation.data)
 
   return (
     <CommandItem className="h-12 my-2 flex justify-between">

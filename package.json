@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sky-dev": "concurrently \"next build\" \"cd socket && npm run dev\""
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.2.0",
@@ -30,6 +31,8 @@
     "query-string": "^8.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^4.4.4"

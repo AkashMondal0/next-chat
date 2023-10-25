@@ -22,14 +22,16 @@ import useClientProfile from '@/hooks/client-profile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Bell } from 'lucide-react';
+import socket from '@/lib/socket';
+import { useRouter } from 'next/navigation';
 
 const fetchUsers = async () => {
     const res = await fetch('/api/chat/list')
     return res.json()
 }
 export default function Sidebar() {
-    const { user, error: UserError, isLoading } = useUser();
-    const profile = useClientProfile()
+    const currentProfile = useClientProfile()
+    const router = useRouter()
 
     const { status, data, error, refetch } = useQuery<Conversation[]>({
         queryKey: ['chatList'],
@@ -38,9 +40,14 @@ export default function Sidebar() {
 
     useEffect(() => {
         if (data) {
-            profile.setConversations(data as Conversation[])
+            currentProfile.setConversations(data as Conversation[])
         }
-    }, [data])
+        socket.on('user_chat_list', (data: User) => {
+            console.log('user_chat_list', data)
+            refetch()
+            router.refresh()
+        })
+    }, [data, socket])
 
     // console.log(data)
     return (
@@ -62,7 +69,7 @@ export default function Sidebar() {
                             </div>}
                             {status === "error" && <div>{error?.message}</div>}
                             {data?.map((item) => {
-                                const otherUser = item.users.filter(uid => uid.id !== user?.sid)[0]
+                                const otherUser = item.users.filter(uid => uid.id !== currentProfile.state.id)[0]
                                 return <Button variant={"ghost"} className="flex items-center py-3 w-full h-auto rounded-2xl my-4" key={item.id}>
                                     <Avatar className="h-12 w-12">
                                         <AvatarImage src={otherUser.imageUrl} alt="Avatar" />

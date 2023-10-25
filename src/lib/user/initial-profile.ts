@@ -8,9 +8,9 @@ const getInitialProfile = async () => {
         return new Response("No Token Available", { status: 401 });
     }
 
-    const user = await db.user.findUnique({
+    const user = await db.user.findFirst({
         where: {
-            id: auth0_user?.user.sid
+            email: auth0_user?.user.email
         }
     })
 

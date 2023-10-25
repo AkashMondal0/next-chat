@@ -1,7 +1,12 @@
 import db from "@/lib/db";
+import socket from "@/lib/socket";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+
+
+    const { id: receiverId } = await req.json()
+    const senderId = new URL(req.url).searchParams.get("senderId")
 
 
     const createConversation = await db.conversation.create({
@@ -9,11 +14,18 @@ export async function POST(req: NextRequest) {
             lastMessage: "new conversation",
             users: {
                 connect: [
-                    { id:  "SWB69ZNeXwm8OGCXNWOyundRQ1pXLW5W"},
-                    { id: "zurzHVhofee5k7r8luG9qwXykAQhCU7z" },
+                    { id: senderId },
+                    { id: receiverId },
                 ],
             },
         },
     });
-    return NextResponse.json(createConversation, { status: 200 });
+
+
+    socket.emit("user_chat_list", {
+        receiverId: receiverId,
+        senderId: senderId,
+        data: createConversation
+    })
+    return NextResponse.json("ok", { status: 200 });
 }

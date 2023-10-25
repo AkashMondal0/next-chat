@@ -3,19 +3,45 @@ import { create } from 'zustand'
 
 
 type ProfileState = {
-    data: User | null
+    state: User
     conversations: Conversation[]
     groups: Group[]
-    setData: (data: User) => void
+    setState: (data: User) => void
     setConversations: (data: Conversation[]) => void
     setGroups: (data: Group[]) => void
 }
 
 const useClientProfile = create<ProfileState>((set) => ({
-    data: null,
+    state: {
+        id: '',
+        userId: '',
+        name: '',
+        imageUrl: '',
+        email: '',
+        phone: '',
+        status: '',
+        notification: [],
+        conversations: [],
+        groups: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        SeenBy: [],
+        GroupSeenBy: []
+    },
     conversations: [],
     groups: [],
-    setData: (data: User) => set({ data: data }),
+    setState: (data) => set((pre)=>{
+        return {
+            state: {
+                ...pre.state,
+                id: data.id,
+                userId: data.userId,
+                name: data.name,
+                imageUrl: data.imageUrl,
+                email: data.email,
+            }
+        }
+    }),
     setConversations: (data: Conversation[]) => set({ conversations: data }),
     setGroups: (data: Group[]) => set({ groups: data })
 }))
