@@ -1,5 +1,5 @@
 'use client'
-import Sidebar from "@/app/(home)/components/sidebar";
+import Sidebar from "@/components/sidebar/sidebar";
 import ChatSection from "@/app/(home)/components/chat-section";
 import { redirect } from "next/navigation";
 import { ModeToggle } from "@/components/shared/ToggleTheme";
@@ -39,10 +39,7 @@ export default function Index() {
   }, [profile])
 
   return (
-    <div className="flex">
-      <div className="hidden sm:block">
-        <Sidebar />
-      </div>
+    <div>
       <ModeToggle />
       <ChatSection />
     </div>

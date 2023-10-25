@@ -1,4 +1,4 @@
-import { Conversation, Group, User } from '@/interface/type'
+import { Conversation, Group, MessageDirect, User } from '@/interface/type'
 import { create } from 'zustand'
 
 
@@ -9,6 +9,7 @@ type ProfileState = {
     setState: (data: User) => void
     setConversations: (data: Conversation[]) => void
     setGroups: (data: Group[]) => void
+    updateConversation: (data: MessageDirect) => void
 }
 
 const useClientProfile = create<ProfileState>((set) => ({
@@ -30,7 +31,7 @@ const useClientProfile = create<ProfileState>((set) => ({
     },
     conversations: [],
     groups: [],
-    setState: (data) => set((pre)=>{
+    setState: (data) => set((pre) => {
         return {
             state: {
                 ...pre.state,
@@ -43,7 +44,17 @@ const useClientProfile = create<ProfileState>((set) => ({
         }
     }),
     setConversations: (data: Conversation[]) => set({ conversations: data }),
-    setGroups: (data: Group[]) => set({ groups: data })
+    setGroups: (data: Group[]) => set({ groups: data }),
+    updateConversation: (data: MessageDirect) => set((pre) => {
+        const index = pre.conversations.findIndex((item) => item.id === data.conversationId)
+        const conversations = [...pre.conversations]
+        const conversation = conversations[index]
+        conversation.lastMessage = data.content
+        conversation.lastMessageTime = data.createdAt
+        conversation.messages.push(data)
+        conversations[index] = conversation
+        return { conversations }
+    })
 }))
 
 export default useClientProfile

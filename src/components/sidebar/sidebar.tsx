@@ -49,9 +49,13 @@ export default function Sidebar() {
         })
     }, [data, socket])
 
+    const ChatPage = (ChatId: string) => {
+        router.replace(`/${ChatId}`)
+    }
+
     // console.log(data)
     return (
-        <div className='border-r'>
+        <div className='border-r hidden sm:block'>
             <Card className="col-span-3 border-none">
                 <ScrollArea className="h-screen w-96">
                     <div className="flex justify-between w-full p-6 items-center">
@@ -69,8 +73,12 @@ export default function Sidebar() {
                             </div>}
                             {status === "error" && <div>{error?.message}</div>}
                             {data?.map((item) => {
-                                const otherUser = item.users.filter(uid => uid.id !== currentProfile.state.id)[0]
-                                return <Button variant={"ghost"} className="flex items-center py-3 w-full h-auto rounded-2xl my-4" key={item.id}>
+                                const otherUser = item.users.find(uid => uid.id !== currentProfile.state.id)
+                                // console.log( currentProfile.state.id)
+                                if (!otherUser) {
+                                    return <UserCardLoading key={item.id}/>
+                                }
+                                return <Button onClick={() => ChatPage(item.id)} variant={"ghost"} className="flex items-center py-3 w-full h-auto rounded-2xl my-4" key={item.id}>
                                     <Avatar className="h-12 w-12">
                                         <AvatarImage src={otherUser.imageUrl} alt="Avatar" />
                                         <AvatarFallback>{otherUser.name[0]}</AvatarFallback>

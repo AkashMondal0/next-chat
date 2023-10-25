@@ -10,7 +10,7 @@ const Header: FC = () => {
 
     const Pathname = usePathname()
     return (
-        <div className={cn('navbar-blur', "w-full h-16 fixed top-0 z-50 md:px-10")}>
+        <div className={cn('navbar-blur', "w-full h-16 top-0 z-50 md:px-10 sticky")}>
             <div className="flex justify-between items-center h-full w-full px-3">
                 {/* logo */}
                 <Link href="/">

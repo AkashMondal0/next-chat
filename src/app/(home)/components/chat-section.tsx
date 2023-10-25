@@ -1,6 +1,6 @@
 import { SheetSide } from '@/components/shared/Sheet';
 import {FC} from 'react';
-import Sidebar from './sidebar';
+import Sidebar from '../../../components/sidebar/sidebar';
 import { Button } from '@/components/ui/button';
 
 interface ChatSectionProps {}
