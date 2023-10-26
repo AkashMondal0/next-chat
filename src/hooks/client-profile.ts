@@ -46,14 +46,17 @@ const useClientProfile = create<ProfileState>((set) => ({
     setConversations: (data: Conversation[]) => set({ conversations: data }),
     setGroups: (data: Group[]) => set({ groups: data }),
     updateConversation: (data: MessageDirect) => set((pre) => {
-        const index = pre.conversations.findIndex((item) => item.id === data.conversationId)
-        const conversations = [...pre.conversations]
-        const conversation = conversations[index]
-        conversation.lastMessage = data.content
-        conversation.lastMessageTime = data.createdAt
-        conversation.messages.push(data)
-        conversations[index] = conversation
-        return { conversations }
+        const updatedConversations = pre.conversations.map((conversation) => {
+            if (conversation.id === data.conversationId) {
+                if (!conversation.messages.find((message) => (message.id === data.id))) {
+                    conversation.messages.push(data)
+                    conversation.lastMessage = data.content
+                    conversation.lastMessageTime = new Date()
+                }
+            }
+            return conversation
+        })
+        return { conversations: updatedConversations }
     })
 }))
 

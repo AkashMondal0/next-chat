@@ -1,16 +1,25 @@
-import { FC } from 'react';
-interface ChatBodyProps { }
-const ChatBody: FC<ChatBodyProps> = () => {
-    const tags = Array.from({ length: 500 }).map(
-        (_, i, a) => `v1.2.0-beta.${a.length - i}`
-    )
+"use client"
+import { Conversation, MessageDirect } from '@/interface/type';
+import { FC, useEffect } from 'react';
+interface ChatBodyProps {
+    data: Conversation | undefined
+    scrollToBottom?: number
+}
+const ChatBody: FC<ChatBodyProps> = ({
+    data,
+    scrollToBottom
+}) => {
+
+    useEffect(() => {
+        console.log('scroll to bottom')
+    }, [scrollToBottom])
+
     return (
-        <div className="p-4">
-            <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4>
-            {tags.map((tag) => (
+        <div className="p-4 min-h-screen">
+            {data?.messages?.map((message) => (
                 <>
-                    <div key={tag} className="text-sm">
-                        {tag}
+                    <div key={message.id} className="text-sm">
+                        {message.content}
                     </div>
                 </>
             ))}

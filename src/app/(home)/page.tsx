@@ -1,5 +1,4 @@
 'use client'
-import Sidebar from "@/components/sidebar/sidebar";
 import ChatSection from "@/app/(home)/components/chat-section";
 import { redirect } from "next/navigation";
 import { ModeToggle } from "@/components/shared/ToggleTheme";
@@ -9,10 +8,7 @@ import socket from "@/lib/socket";
 import useClientProfile from "@/hooks/client-profile";
 
 
-
-
 export default function Index() {
-
   const profile = useUser()
   const currentProfile = useClientProfile()
 
@@ -37,7 +33,6 @@ export default function Index() {
       return redirect("/auth")
     }
   }, [profile])
-
   return (
     <div>
       <ModeToggle />

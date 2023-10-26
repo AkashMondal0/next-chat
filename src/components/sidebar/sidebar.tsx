@@ -16,8 +16,8 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { UserNav } from "./user-nav"
 import SearchModal from "@/components/modal/search_user"
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Conversation, User } from '@/interface/type';
-import { useEffect } from 'react';
+import { Conversation, User, typingState } from '@/interface/type';
+import { useEffect, useState } from 'react';
 import useClientProfile from '@/hooks/client-profile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -31,7 +31,6 @@ const fetchUsers = async () => {
 }
 export default function Sidebar() {
     const currentProfile = useClientProfile()
-    const router = useRouter()
 
     const { status, data, error, refetch } = useQuery<Conversation[]>({
         queryKey: ['chatList'],
@@ -43,17 +42,16 @@ export default function Sidebar() {
             currentProfile.setConversations(data as Conversation[])
         }
         socket.on('user_chat_list', (data: User) => {
-            console.log('user_chat_list', data)
             refetch()
-            router.refresh()
         })
+
+        return () => {
+            socket.off('user_chat_list')
+        }
     }, [data, socket])
 
-    const ChatPage = (ChatId: string) => {
-        router.replace(`/${ChatId}`)
-    }
 
-    // console.log(data)
+
     return (
         <div className='border-r hidden sm:block'>
             <Card className="col-span-3 border-none">
@@ -74,23 +72,10 @@ export default function Sidebar() {
                             {status === "error" && <div>{error?.message}</div>}
                             {data?.map((item) => {
                                 const otherUser = item.users.find(uid => uid.id !== currentProfile.state.id)
-                                // console.log( currentProfile.state.id)
                                 if (!otherUser) {
-                                    return <UserCardLoading key={item.id}/>
+                                    return <UserCardLoading key={item.id} />
                                 }
-                                return <Button onClick={() => ChatPage(item.id)} variant={"ghost"} className="flex items-center py-3 w-full h-auto rounded-2xl my-4" key={item.id}>
-                                    <Avatar className="h-12 w-12">
-                                        <AvatarImage src={otherUser.imageUrl} alt="Avatar" />
-                                        <AvatarFallback>{otherUser.name[0]}</AvatarFallback>
-                                    </Avatar>
-                                    <div className="ml-4 space-y-1">
-                                        <p className="text-sm font-medium leading-none text-start">{otherUser.name}</p>
-                                        <p className="text-sm text-muted-foreground text-start">
-                                            {otherUser.email}
-                                        </p>
-                                    </div>
-                                    <div className="ml-auto font-medium">{new Date(item.updatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
-                                </Button>
+                                return <UserCard data={otherUser} key={item.id} item={item} />
                             })}
                         </div>
                     </CardContent>
@@ -98,6 +83,42 @@ export default function Sidebar() {
             </Card>
         </div>
     )
+}
+
+
+const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
+    const router = useRouter()
+    const [isTyping, setIsTyping] = useState(false)
+    const ChatPage = (ChatId: string) => {
+        router.replace(`/${ChatId}`)
+    }
+    useEffect(() => {
+
+        socket.on('_typing', (data_typing: typingState) => {
+            if (data_typing.senderId === data.id) {
+                setIsTyping(data_typing.typing)
+            }
+        })
+
+        return () => {
+            socket.off('_typing')
+        }
+    }, [socket])
+
+    return <Button onClick={() => ChatPage(item.id)}
+        variant={"ghost"} className="flex items-center py-3 w-full h-auto rounded-2xl my-4" key={item.id}>
+        <Avatar className="h-12 w-12">
+            <AvatarImage src={data.imageUrl} alt="Avatar" />
+            <AvatarFallback>{data.name[0]}</AvatarFallback>
+        </Avatar>
+        <div className="ml-4 space-y-1">
+            <p className="text-sm font-medium leading-none text-start">{data.name}</p>
+            <p className="text-sm text-muted-foreground text-start">
+                {isTyping ? "typing" : item.lastMessage}
+            </p>
+        </div>
+        <div className="ml-auto font-medium">{new Date(item.lastMessageTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
+    </Button>
 }
 
 

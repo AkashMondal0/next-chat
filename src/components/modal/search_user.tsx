@@ -23,8 +23,7 @@ const SearchModal: FC<SearchModalProps> = () => {
     queryFn: fetchUsers,
   })
 
-
-  return (<Modal title={"Search User"} trigger={<Button variant={"ghost"}><Users className='w-6 h-6 cursor-pointer'/></Button>}>
+  return (<Modal title={"Search User"} trigger={<Button variant={"ghost"}><Users className='w-6 h-6 cursor-pointer' /></Button>}>
     <SearchCommand
       data={data?.filter(user => user.id !== currentProfile.state.id)}
       status={status}

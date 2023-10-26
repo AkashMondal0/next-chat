@@ -14,7 +14,19 @@ export async function GET (){
             }
         },
         include: {
-            users: true
+            users: {
+               select:{
+                id: true,
+                name: true,
+                imageUrl: true,
+                email: true,
+               }
+            },
+            messages: {
+                orderBy: {
+                    createdAt: "asc"
+                },
+            }
         }
     })
 

@@ -20,13 +20,13 @@ model Notification {
 
 // chat app schemas
 model User {
-  id            String         @id @default(uuid())
-  userId        String         @unique
-  name          String
-  imageUrl      String         @db.Text
-  email         String         @db.Text
-  phone         String         @db.Text
-  status        String         @db.Text
+  id       String @id @default(uuid())
+  userId   String @unique
+  name     String
+  imageUrl String @db.Text
+  email    String @db.Text
+  phone    String @db.Text
+  status   String @db.Text
 
   notification  Notification[]
   conversations Conversation[]
@@ -66,10 +66,9 @@ model MessageDirect {
   deleted        Boolean       @default(false)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  seenBy         SeenBy[] // Add a new relation to the SeenBy model
+  seenBy         SeenBy[]
   Conversation   Conversation? @relation(fields: [conversationId], references: [id])
-  conversationId String?
-  GroupSeenBy    GroupSeenBy[]
+  conversationId String
 }
 
 // group chat schemas
@@ -94,26 +93,25 @@ enum MemberRole {
 }
 
 model Member {
-  id          String        @id @default(uuid())
-  role        MemberRole    @default(MEMBER)
-  userId      String
+  id        String     @id @default(uuid())
+  role      MemberRole @default(MEMBER)
+  userId    String
   // user        User          @relation(fields: [userId], references: [id])
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  groupId     String
-  group       Group         @relation(fields: [groupId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  groupId   String
+  group     Group      @relation(fields: [groupId], references: [id])
 }
 
 model GroupSeenBy {
-  id              String         @id @default(uuid())
+  id              String   @id @default(uuid())
   userId          String
   messageId       String
-  message         Message        @relation(fields: [messageId], references: [id])
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  MessageDirect   MessageDirect? @relation(fields: [messageDirectId], references: [id])
+  message         Message  @relation(fields: [messageId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   messageDirectId String?
-  User            User           @relation(fields: [userId], references: [id])
+  User            User     @relation(fields: [userId], references: [id])
 }
 
 model Message {

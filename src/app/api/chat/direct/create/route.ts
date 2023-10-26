@@ -27,5 +27,5 @@ export async function POST(req: NextRequest) {
         senderId: senderId,
         data: createConversation
     })
-    return NextResponse.json("ok", { status: 200 });
+    return NextResponse.json(createConversation, { status: 200 });
 }

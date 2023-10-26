@@ -54,17 +54,15 @@ export type Notification = {
   }
   
   export type MessageDirect = {
-    id: string;
+    id?: string;
     content: string;
     fileUrl?: string;
+    conversationId: string;
     memberId: string;
-    deleted: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-    seenBy: SeenBy[];
-    Conversation?: Conversation;
-    conversationId?: string;
-    GroupSeenBy: GroupSeenBy[];
+    deleted?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+    seenBy?: SeenBy[];
   }
   
   export type Group = {
@@ -120,3 +118,10 @@ export type Notification = {
     createdAt: Date;
     updatedAt: Date;
   }
+
+  export type typingState = {
+    conversationId?: string,
+    senderId?: string,
+    receiverId?: string,
+    typing: boolean
+}
