@@ -27,6 +27,8 @@ socketIO.on('connection', (socket) => {
   socket.on('user_chat_list', (_data) => {
     const { receiverId, senderId, data } = _data;
 
+    // socket.join(receiverId);
+    // socket.join(senderId);
     socketIO.to(senderId).emit('user_chat_list', data);
     socketIO.to(receiverId).emit('user_chat_list', data);
   });
@@ -35,6 +37,8 @@ socketIO.on('connection', (socket) => {
   socket.on('message_for_user', (_data) => {
     const { receiverId, senderId, data } = _data;
 
+    // socket.join(receiverId);
+    // socket.join(senderId);
     socketIO.to(senderId).emit('message_for_user', data);
     socketIO.to(receiverId).emit('message_for_user', data);
   });
@@ -42,10 +46,9 @@ socketIO.on('connection', (socket) => {
   // typing --------------------------------------
   socket.on('_typing', (_data) => {
     const { receiverId, senderId, conversationId, typing } = _data;
-    // console.log(_data)
+    socket.join(receiverId);
     socketIO.to(receiverId).emit('_typing', _data);
   });
-
 
   socket.on('disconnect', () => {
     console.log('user disconnected');

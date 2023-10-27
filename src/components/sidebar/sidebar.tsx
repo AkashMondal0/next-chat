@@ -15,7 +15,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UserNav } from "./user-nav"
 import SearchModal from "@/components/modal/search_user"
-import { useUser } from '@auth0/nextjs-auth0/client';
 import { Conversation, User, typingState } from '@/interface/type';
 import { useEffect, useState } from 'react';
 import useClientProfile from '@/hooks/client-profile';
@@ -88,9 +87,8 @@ export default function Sidebar() {
 
 const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     const router = useRouter()
-    const currentProfile = useClientProfile()
-
     const [isTyping, setIsTyping] = useState(false)
+
     const ChatPage = (ChatId: string) => {
         router.replace(`/${ChatId}`)
     }

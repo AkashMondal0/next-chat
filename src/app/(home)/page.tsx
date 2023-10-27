@@ -6,6 +6,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect } from "react";
 import socket from "@/lib/socket";
 import useClientProfile from "@/hooks/client-profile";
+import { MessageDirect } from "@/interface/type";
 
 
 export default function Index() {
@@ -17,9 +18,7 @@ export default function Index() {
     if (profile.user) {
       console.log('socket', socket.connected)
       socket.emit('user_connect', {
-        id: profile.user?.sid,
-        name: profile.user?.name,
-        image: profile.user?.picture
+        id: profile.user?.sid
       })
       currentProfile.setState({
         ...currentProfile.state,
@@ -29,6 +28,9 @@ export default function Index() {
         userId: profile.user?.sid as string,
       })
     }
+    socket.on('message_for_user', (data: MessageDirect) => {
+      currentProfile.updateConversation(data)
+    })
     if (!profile) {
       return redirect("/auth")
     }

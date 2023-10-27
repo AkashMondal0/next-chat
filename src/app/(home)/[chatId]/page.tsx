@@ -26,11 +26,7 @@ const ChatPage: FC<ChatPageProps> = ({
         setScrollToBottom(scrollToBottom + 1)
       }
     })
-
-    return () => {
-      socket.off('message_for_user')
-    }
-  }, [params.chatId])
+  }, [params.chatId,socket])
 
   return (
     <ScrollArea className="h-screen w-full rounded-md border">
