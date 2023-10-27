@@ -57,7 +57,7 @@ export default function Sidebar() {
             <Card className="col-span-3 border-none">
                 <ScrollArea className="h-screen w-96">
                     <div className="flex justify-between w-full p-6 items-center">
-                        <CardTitle>Sky Solo Chat</CardTitle>
+                        <CardTitle>Next Chat</CardTitle>
                         <UserNav />
                     </div>
                     <CardContent className='p-0'>
@@ -88,21 +88,18 @@ export default function Sidebar() {
 
 const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     const router = useRouter()
+    const currentProfile = useClientProfile()
+
     const [isTyping, setIsTyping] = useState(false)
     const ChatPage = (ChatId: string) => {
         router.replace(`/${ChatId}`)
     }
     useEffect(() => {
-
         socket.on('_typing', (data_typing: typingState) => {
-            if (data_typing.senderId === data.id) {
+            if (data_typing.receiverId !== data.id && data_typing.conversationId === item.id) {
                 setIsTyping(data_typing.typing)
             }
         })
-
-        return () => {
-            socket.off('_typing')
-        }
     }, [socket])
 
     return <Button onClick={() => ChatPage(item.id)}
