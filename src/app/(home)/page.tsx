@@ -5,20 +5,21 @@ import { useEffect, useState } from "react";
 import socket from "@/lib/socket";
 import useClientProfile from "@/hooks/client-profile";
 import { MessageDirect } from "@/interface/type";
-import Sidebar from "@/app/(home)/components/sidebar/sidebar";
+import Sidebar from "@/app/(home)/components/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "./components/header";
 import ChatBody from "./components/body";
 import ChatFooter from "./components/footer";
+import useScrollToTop from "@/hooks/scrollToBottom";
 
 
 export default function Index() {
   const profile = useUser()
   const currentProfile = useClientProfile()
   const searchParam = useSearchParams().get("id")
+  const scrollIntoView = useScrollToTop()
 
   let conversation = currentProfile.conversations.find((conversation) => conversation.id === searchParam)
-  const [scrollToBottom, setScrollToBottom] = useState(0)
 
 
   useEffect(() => {
@@ -35,16 +36,22 @@ export default function Index() {
         userId: profile.user?.sid as string,
       })
     }
-    socket.on('message_for_user', (data: MessageDirect) => {
-      currentProfile.updateConversation(data)
-    })
     if (!profile) {
       return redirect("/auth")
     }
+  }, [profile])
+
+  useEffect(() => {
+    socket.on('message_for_user', (data: MessageDirect) => {
+      currentProfile.updateConversation(data)
+      if (data.conversationId === searchParam) {
+        scrollIntoView.setState()
+      }
+    })
     return () => {
       socket.off('message_for_user')
     }
-  }, [profile])
+  }, [socket, searchParam])
 
   return (
     <div className="flex w-full">
@@ -52,12 +59,11 @@ export default function Index() {
         <Sidebar />
       </div>
       {!conversation ? null :
-        <ScrollArea className="h-screen w-full rounded-md border">
+        <ScrollArea className="h-screen w-full rounded-md border scroll-smooth">
           <Header data={conversation} />
-          <ChatBody data={conversation} scrollToBottom={scrollToBottom} />
+          <ChatBody data={conversation} />
           <ChatFooter data={conversation} />
-        </ScrollArea>
-      }
+        </ScrollArea>}
     </div>
   );
 }

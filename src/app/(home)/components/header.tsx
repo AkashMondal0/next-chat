@@ -7,7 +7,7 @@ import { Conversation } from '@/interface/type';
 import useClientProfile from '@/hooks/client-profile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SheetSide } from '@/components/shared/Sheet';
-import Sidebar from '@/app/(home)/components/sidebar/sidebar';
+import Sidebar from '@/app/(home)/components/sidebar';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 

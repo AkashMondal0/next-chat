@@ -8,6 +8,7 @@ import axios from "axios"
 import qs from "query-string"
 import { useMutation, useQuery } from '@tanstack/react-query'
 import socket from '@/lib/socket';
+import { Send } from 'lucide-react';
 interface ChatFooterProps {
     data: Conversation | undefined
 }
@@ -23,8 +24,9 @@ const ChatFooter: FC<ChatFooterProps> = ({
             content: inputValue,
             memberId: currentProfile.state.id,
             fileUrl: '',
-            conversationId: data?.id || "",
+            conversationId: data?.id || ""
         }
+        setInputValue("")
         const url = qs.stringifyUrl({
             url: "/api/chat/direct/message",
             query: {
@@ -60,13 +62,17 @@ const ChatFooter: FC<ChatFooterProps> = ({
 
 
     return (
-        <div className={cn('navbar-blur', "w-full h-20 bottom-0 z-50 md:px-10 sticky border-t")}>
+        <div className={cn('navbar-blur', "w-full py-4 bottom-0 z-50 sticky border-t")}>
             <div className="flex justify-between items-center h-full w-full px-3">
-                <div className="flex w-full max-w-sm items-center space-x-2">
-                    <Input onFocus={isTyping}
+                <div className="flex w-full items-center bg-neutral-700 rounded-xl">
+                    <input onFocus={isTyping}
                         onBlur={stopTyping}
+                        className='outline-none focus:none bg-transparent w-full p-2'
                         type="text" placeholder="send a message" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-                    <Button type="button" onClickCapture={() => mutation.mutate()} disabled={mutation.isPending}>Send</Button>
+                    <Button type="button" variant={"ghost"} className='rounded-xl'
+                        onClickCapture={() => mutation.mutate()} disabled={mutation.isPending}>
+                        <Send />
+                    </Button>
                 </div>
             </div>
         </div>
