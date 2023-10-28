@@ -52,9 +52,9 @@ export default function Sidebar() {
 
 
     return (
-        <div className='border-r hidden sm:block'>
+        <div className='border-r'>
             <Card className="col-span-3 border-none">
-                <ScrollArea className="h-screen w-96">
+                <ScrollArea className="h-screen w-full md:w-96">
                     <div className="flex justify-between w-full p-6 items-center">
                         <CardTitle>Next Chat</CardTitle>
                         <UserNav />
@@ -71,10 +71,7 @@ export default function Sidebar() {
                             {status === "error" && <div>{error?.message}</div>}
                             {data?.map((item) => {
                                 const otherUser = item.users.find(uid => uid.id !== currentProfile.state.id)
-                                if (!otherUser) {
-                                    return <UserCardLoading key={item.id} />
-                                }
-                                return <UserCard data={otherUser} key={item.id} item={item} />
+                                return <>{otherUser?.id ? <UserCard data={otherUser} key={item.id} item={item} /> : <UserCardLoading key={item.id} />}</>
                             })}
                         </div>
                     </CardContent>
@@ -90,7 +87,7 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     const [isTyping, setIsTyping] = useState(false)
 
     const ChatPage = (ChatId: string) => {
-        router.replace(`/${ChatId}`)
+        router.replace(`?id=${ChatId}`)
     }
     useEffect(() => {
         socket.on('_typing', (data_typing: typingState) => {

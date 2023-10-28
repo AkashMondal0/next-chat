@@ -2,11 +2,14 @@
 'use client'
 import { cn } from '@/lib/utils';
 import { FC } from 'react';
-import Link from 'next/link';
 import { ModeToggle } from '@/components/shared/ToggleTheme';
 import { Conversation } from '@/interface/type';
 import useClientProfile from '@/hooks/client-profile';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SheetSide } from '@/components/shared/Sheet';
+import Sidebar from '@/app/(home)/components/sidebar/sidebar';
+import { Button } from '@/components/ui/button';
+import { Menu } from 'lucide-react';
 
 interface HeaderProps {
     data: Conversation | undefined
@@ -23,14 +26,23 @@ const Header: FC<HeaderProps> = ({
             <div className="flex justify-between items-center h-full w-full">
                 {/* logo */}
                 {userData ?
-                    <Link href="/">
-                        <div className="flex items-center gap-2">
-                            <div className="w-12 h-12 rounded-full dark:bg-white bg-black">
-                                <img src={userData?.imageUrl} alt="avatar" className="w-full h-full rounded-full object-cover" />
-                            </div>
-                            <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 md:flex hidden">{userData?.name}</h1>
+                    <div className='flex items-center gap-3'>
+
+                        <div className='md:hidden'>
+                            <SheetSide trigger={<Menu size={30} className='cursor-pointer'/>}>
+                                <Sidebar />
+                            </SheetSide>
                         </div>
-                    </Link> :
+                        <>
+                            <div className="flex items-center gap-2">
+                                <div className="w-12 h-12 rounded-full dark:bg-white bg-black">
+                                    <img src={userData?.imageUrl} alt="avatar" className="w-full h-full rounded-full object-cover" />
+                                </div>
+                                <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex">{userData?.name}</h1>
+                            </div>
+                        </>
+                    </div>
+                    :
                     <div className="flex items-center space-x-4">
                         <Skeleton className="h-12 w-12 rounded-full" />
                         <div className="space-y-2">

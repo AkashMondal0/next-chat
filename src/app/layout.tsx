@@ -6,7 +6,6 @@ import Auth0_Provider from '@/components/provider/Auth0_Provider'
 import React_Query from '@/components/provider/React-Query_Provider'
 import { Metadata } from 'next'
 import getInitialProfile from '@/lib/user/initial-profile'
-import Sidebar from '@/components/sidebar/sidebar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +23,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className,
-        "transition-all animate-in delay-75 duration-150 flex")}>
+        "transition-all animate-in delay-75 duration-150")}>
         <ThemeProvider
           defaultTheme="system"
           enableSystem
@@ -32,7 +31,6 @@ export default async function RootLayout({
           storageKey="theme">
           <Auth0_Provider>
             <React_Query>
-              <Sidebar />
               {children}
             </React_Query>
           </Auth0_Provider>
