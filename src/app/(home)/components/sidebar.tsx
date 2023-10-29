@@ -23,13 +23,15 @@ import { Button } from '@/components/ui/button';
 import { Bell } from 'lucide-react';
 import socket from '@/lib/socket';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const fetchUsers = async () => {
-    const res = await fetch('/api/chat/list')
-    return res.json()
+    const res = await axios.get('/api/chat/list')
+    return res.data
 }
 export default function Sidebar() {
     const currentProfile = useClientProfile()
+
 
     const { status, data, error, refetch } = useQuery<Conversation[]>({
         queryKey: ['chatList'],
@@ -52,9 +54,9 @@ export default function Sidebar() {
 
 
     return (
-        <div>
+        <div className='md:block hidden'>
             <Card className="col-span-3 border-none">
-                <ScrollArea className="h-screen w-full md:w-96">
+                <ScrollArea className={`h-[100dvh)] w-full md:w-96`}>
                     <div className="flex justify-between w-full p-6 items-center">
                         <CardTitle>Next Chat</CardTitle>
                         <UserNav />
@@ -71,8 +73,8 @@ export default function Sidebar() {
                             {status === "error" && <div>{error?.message}</div>}
                             {data?.map((item) => {
                                 const otherUser = item.users.find(uid => uid.id !== currentProfile.state.id)
-                                return <>{otherUser?.id ? 
-                                <UserCard data={otherUser} key={item.id} item={item} /> : <UserCardLoading key={item.id} />}</>
+                                return <>{otherUser?.id ?
+                                    <UserCard data={otherUser} key={item.id} item={item} /> : <UserCardLoading key={item.id} />}</>
                             })}
                         </div>
                     </CardContent>

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { redirect, useSearchParams } from "next/navigation";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -55,11 +57,17 @@ export default function Index() {
 
   return (
     <div className="flex w-full">
-      <div className='md:block hidden'>
-        <Sidebar />
-      </div>
-      {!conversation ? null :
-        <ScrollArea className="h-screen w-full rounded-md border scroll-smooth">
+      <Sidebar />
+      {!conversation ?
+        <>
+          <div className="md:hidden w-full">
+            <Sidebar />
+          </div>
+          <div className="justify-center items-center hidden md:flex w-full h-[100dvh]">
+            <img src="logo.png"/>
+          </div>
+        </> :
+        <ScrollArea className={`h-[100dvh] w-full rounded-md border scroll-smooth`}>
           <Header data={conversation} />
           <ChatBody data={conversation} />
           <ChatFooter data={conversation} />

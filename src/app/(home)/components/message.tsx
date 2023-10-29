@@ -31,7 +31,7 @@ const MessagesCard: FC<MessagesCardProps> = ({
                     {data.content}
                     <div className='flex gap-1 mt-3'>
                         <div className='text-sm text-gray-500'>
-                            {new Date(data.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                            {new Date(data.createdAt as Date).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
                         </div>
                         {profile ? <div className='text-sm text-gray-500'>
                             <CheckCheck size={20} className='text-sky-400' />

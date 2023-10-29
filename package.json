@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "postinstall": "prisma generate",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "sky-dev": "concurrently \"next build\" \"cd socket && npm run dev\""
+    "setup-prisma":"npx prisma migrate dev --name init ",
+    "setup-local": "npm install && cd socket && npm install",
+    "dev-local": "concurrently \"npm run dev\" \"cd socket && npm run dev\""
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.2.0",

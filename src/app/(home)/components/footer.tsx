@@ -64,7 +64,9 @@ const ChatFooter: FC<ChatFooterProps> = ({
     return (
         <div className={cn('navbar-blur', "w-full py-4 bottom-0 z-50 sticky border-t")}>
             <div className="flex justify-between items-center h-full w-full px-3">
-                <div className="flex w-full items-center bg-neutral-700 rounded-xl">
+                <div className="flex w-full items-center dark:bg-neutral-700 
+                bg-neutral-200 dark:text-neutral-100 text-neutral-800
+                rounded-xl">
                     <input onFocus={isTyping}
                         onBlur={stopTyping}
                         className='outline-none focus:none bg-transparent w-full p-2'
