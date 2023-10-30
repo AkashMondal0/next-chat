@@ -10,6 +10,7 @@ type ProfileState = {
     setConversations: (data: Conversation[]) => void
     setGroups: (data: Group[]) => void
     updateConversation: (data: MessageDirect) => void
+    conversationMessageSeen: (conversationId: string, data: string[]) => void
 }
 
 const useClientProfile = create<ProfileState>((set) => ({
@@ -57,7 +58,22 @@ const useClientProfile = create<ProfileState>((set) => ({
             return conversation
         })
         return { conversations: updatedConversations }
+    }),
+    conversationMessageSeen: (conversationId: string, data: string[]) => set((pre) => {
+        const updatedConversations = pre.conversations.map((conversation) => {
+            if (conversation.id === conversationId) {
+                conversation.messages.map((message) => {
+                    if (data.find((id) => (id === message.id))) {
+                        message.deleted = true
+                    }
+                    return message
+                })
+            }
+            return conversation
+        })
+        return { conversations: updatedConversations }
     })
-}))
+    // update message in conversation
 
+}))
 export default useClientProfile

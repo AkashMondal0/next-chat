@@ -41,6 +41,7 @@ const ChatBody: FC<ChatBodyProps> = ({
             </div>
             <div className='w-full'>
                 {data?.messages?.map((message) => <MessagesCard
+                    seen={message.deleted as boolean}
                     profile={currentProfile.state.id === message.memberId}
                     data={message} key={message.id} />)}
             </div>

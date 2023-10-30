@@ -64,7 +64,7 @@ export default function Index() {
             <Sidebar />
           </div>
           <div className="justify-center items-center hidden md:flex w-full h-[100dvh]">
-            <img src="logo.png"/>
+            <img src="logo.png" />
           </div>
         </> :
         <ScrollArea className={`h-[100dvh] w-full rounded-md border scroll-smooth`}>

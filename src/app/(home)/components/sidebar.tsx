@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
@@ -15,14 +16,14 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UserNav } from "./user-nav"
 import SearchModal from "@/components/modal/search_user"
-import { Conversation, User, typingState } from '@/interface/type';
+import { Conversation, MessageDirect, User, typingState } from '@/interface/type';
 import { useEffect, useState } from 'react';
 import useClientProfile from '@/hooks/client-profile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Bell } from 'lucide-react';
 import socket from '@/lib/socket';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
 const fetchUsers = async () => {
@@ -31,7 +32,6 @@ const fetchUsers = async () => {
 }
 export default function Sidebar() {
     const currentProfile = useClientProfile()
-
 
     const { status, data, error, refetch } = useQuery<Conversation[]>({
         queryKey: ['chatList'],
@@ -52,11 +52,10 @@ export default function Sidebar() {
     }, [data, socket])
 
 
-
     return (
         <div className='md:block hidden'>
             <Card className="col-span-3 border-none">
-                <ScrollArea className={`h-[100dvh)] w-full md:w-96`}>
+                <ScrollArea className={`h-[100dvh] w-full md:w-96 scroll-smooth`}>
                     <div className="flex justify-between w-full p-6 items-center">
                         <CardTitle>Next Chat</CardTitle>
                         <UserNav />
@@ -88,31 +87,70 @@ export default function Sidebar() {
 const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     const router = useRouter()
     const [isTyping, setIsTyping] = useState(false)
+    const currentProfile = useClientProfile()
+    const searchParam = useSearchParams().get("id")
+    // const [du]
+
+    const seenCount = () => {
+        return item.messages.filter((item) => item.memberId !== currentProfile.state.id).filter((item) => item.deleted === false)
+    }
+
+    const postUser = async (ids: string[]) => {
+        const messageSeen = {
+            senderId: currentProfile.state.id,
+            receiverId: data.id,
+            data: ids,
+        }
+        let res = await axios.post("/api/chat/direct/message/seen", messageSeen)
+        socket.emit("message_for_user_seen", res.data)
+        currentProfile.conversationMessageSeen(item.id, messageSeen.data)
+        return res
+    }
+    const mutation = useMutation({ mutationFn: postUser })
 
     const ChatPage = (ChatId: string) => {
+        if (seenCount().length > 0) {
+            mutation.mutate(seenCount().map((item) => item.id) as string[])
+        }
         router.replace(`?id=${ChatId}`)
     }
+
     useEffect(() => {
         socket.on('_typing', (data_typing: typingState) => {
             if (data_typing.receiverId !== data.id && data_typing.conversationId === item.id) {
                 setIsTyping(data_typing.typing)
             }
         })
+        socket.on('message_for_user_seen', (seen_data) => {
+            if (seen_data.senderId !== currentProfile.state.id) {
+                currentProfile.conversationMessageSeen(item.id, seen_data.data)
+            }
+        })
     }, [socket])
 
     return <Button onClick={() => ChatPage(item.id)}
-        variant={"ghost"} className="flex items-center py-3 w-full h-auto rounded-2xl my-4" key={item.id}>
-        <Avatar className="h-12 w-12">
-            <AvatarImage src={data.imageUrl} alt="Avatar" />
-            <AvatarFallback>{data.name[0]}</AvatarFallback>
-        </Avatar>
-        <div className="ml-4 space-y-1">
-            <p className="text-sm font-medium leading-none text-start">{data.name}</p>
-            <p className="text-sm text-muted-foreground text-start">
-                {isTyping ? "typing" : item.lastMessage}
-            </p>
+        variant={"ghost"}
+        className={`${searchParam === item.id && "bg-accent"} flex items-center py-3 w-full h-auto rounded-2xl my-3`}
+        key={item.id}>
+        <div className={`flex w-full items-center`}>
+            <Avatar className="h-12 w-12">
+                <AvatarImage src={data.imageUrl} alt="Avatar" />
+                <AvatarFallback>{data.name[0]}</AvatarFallback>
+            </Avatar>
+            <div className="ml-4 space-y-1">
+                <p className="text-sm font-medium leading-none text-start">{data.name}</p>
+                <p className="text-sm text-muted-foreground text-start">
+                    {isTyping ? "typing" : item.lastMessage}
+                </p>
+            </div>
         </div>
-        <div className="ml-auto font-medium">{new Date(item.lastMessageTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
+        <div className='w-20'>
+            <div className="ml-auto font-medium">{new Date(item.lastMessageTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
+            {searchParam !== item.id && seenCount().length > 0 ? <div className='rounded-full bg-black dark:bg-white mx-auto my-1
+            text-white dark:text-black w-6 h-6 flex justify-center items-center'>
+                {seenCount().length || 0}
+            </div> : <div className='w-6 h-6' />}
+        </div>
     </Button>
 }
 

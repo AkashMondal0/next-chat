@@ -43,6 +43,15 @@ socketIO.on('connection', (socket) => {
     socketIO.to(receiverId).emit('message_for_user', data);
   });
 
+  socket.on('message_for_user_seen', (_data) => {
+    const { receiverId, senderId, data } = _data;
+
+    // socket.join(receiverId);
+    // socket.join(senderId);
+    // socketIO.to(senderId).emit('message_for_user_seen', _data);
+    socketIO.to(receiverId).emit('message_for_user_seen', _data);
+  });
+
   // typing --------------------------------------
   socket.on('_typing', (_data) => {
     const { receiverId, senderId, conversationId, typing } = _data;
