@@ -25,6 +25,7 @@ import { Bell } from 'lucide-react';
 import socket from '@/lib/socket';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import useScrollToTop from '@/hooks/scrollToBottom';
 
 const fetchUsers = async () => {
     const res = await axios.get('/api/chat/direct/list')
@@ -44,7 +45,6 @@ export default function Sidebar() {
         }
         socket.on('user_chat_list', () => {
             refetch()
-            // console.log('refetch')
         })
     }, [data, socket])
 
@@ -86,30 +86,33 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     const [isTyping, setIsTyping] = useState(false)
     const currentProfile = useClientProfile()
     const searchParam = useSearchParams().get("id")
-    // const [du]
+    const Scroll = useScrollToTop()
+    
 
     const seenCount = () => {
         return item.messages.filter((item) => item.memberId !== currentProfile.state.id).filter((item) => item.deleted === false)
     }
 
-    const postUser = async (ids: string[]) => {
+    const postSeen = async (ids: string[]) => {
         const messageSeen = {
             senderId: currentProfile.state.id,
             receiverId: data.id,
             data: ids,
         }
         let res = await axios.post("/api/chat/direct/message/seen", messageSeen)
-        socket.emit("message_for_user_seen", res.data)
+        socket.emit("message_for_user_seen", messageSeen)
         currentProfile.conversationMessageSeen(item.id, messageSeen.data)
         return res
     }
-    const mutation = useMutation({ mutationFn: postUser })
+    const mutation = useMutation({ mutationFn: postSeen })
 
     const ChatPage = (ChatId: string) => {
         if (seenCount().length > 0) {
             mutation.mutate(seenCount().map((item) => item.id) as string[])
         }
-        router.replace(`?id=${ChatId}`)
+        if (searchParam !== item.id) {
+            router.replace(`?id=${ChatId}`)
+        }
     }
 
     useEffect(() => {
@@ -124,6 +127,12 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
             }
         })
     }, [socket])
+
+    useEffect(() => {
+        if (searchParam === item.id) {
+            ChatPage(searchParam)
+        }
+    }, [searchParam, Scroll])
 
     return <Button onClick={() => ChatPage(item.id)}
         variant={"ghost"}
