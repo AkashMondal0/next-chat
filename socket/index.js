@@ -27,8 +27,9 @@ socketIO.on('connection', (socket) => {
   socket.on('user_chat_list', (_data) => {
     const { receiverId, senderId, data } = _data;
 
-    // socket.join(receiverId);
-    // socket.join(senderId);
+    // console.log('user_chat_list', _data)
+    socket.join(receiverId);
+    socket.join(senderId);
     socketIO.to(senderId).emit('user_chat_list', data);
     socketIO.to(receiverId).emit('user_chat_list', data);
   });
@@ -37,8 +38,6 @@ socketIO.on('connection', (socket) => {
   socket.on('message_for_user', (_data) => {
     const { receiverId, senderId, data } = _data;
 
-    // socket.join(receiverId);
-    // socket.join(senderId);
     socketIO.to(senderId).emit('message_for_user', data);
     socketIO.to(receiverId).emit('message_for_user', data);
   });
@@ -46,9 +45,6 @@ socketIO.on('connection', (socket) => {
   socket.on('message_for_user_seen', (_data) => {
     const { receiverId, senderId, data } = _data;
 
-    // socket.join(receiverId);
-    // socket.join(senderId);
-    // socketIO.to(senderId).emit('message_for_user_seen', _data);
     socketIO.to(receiverId).emit('message_for_user_seen', _data);
   });
 

@@ -27,7 +27,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
 const fetchUsers = async () => {
-    const res = await axios.get('/api/chat/list')
+    const res = await axios.get('/api/chat/direct/list')
     return res.data
 }
 export default function Sidebar() {
@@ -42,13 +42,10 @@ export default function Sidebar() {
         if (data) {
             currentProfile.setConversations(data as Conversation[])
         }
-        socket.on('user_chat_list', (data: User) => {
+        socket.on('user_chat_list', () => {
             refetch()
+            // console.log('refetch')
         })
-
-        return () => {
-            socket.off('user_chat_list')
-        }
     }, [data, socket])
 
 
