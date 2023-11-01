@@ -19,12 +19,15 @@ const SearchModal: FC<SearchModalProps> = () => {
   const currentProfile = useClientProfile()
 
   const filterUser = (users: User[]) => {
-    const removeConversationUsers = users.filter(user => !currentProfile.conversations.map((c) => c.users.includes(user)));
-    return removeConversationUsers.filter(user => user.id !== currentProfile?.state.id)
+   return users.filter(user => 
+      !currentProfile.conversations.some(conversation => 
+        conversation.users.some(innerUser => innerUser.id === user.id)
+      )
+    )
   }
 
   const { status, data, error } = useQuery<User[]>({
-    queryKey: ['usersList'],
+    queryKey: ['Conversations'],
     queryFn: fetchUsers,
   })
 
@@ -32,7 +35,7 @@ const SearchModal: FC<SearchModalProps> = () => {
     <Users className='w-6 h-6 cursor-pointer' />
   </Button>}>
     <SearchCommand
-      data={filterUser(data ? data : [])}
+      data={filterUser(data?data:[])}
       status={status}
       error={error?.message} />
   </Modal>)
