@@ -57,10 +57,12 @@ export default function Index() {
 
   return (
     <div className="flex w-full">
-      <Sidebar />
+      <div className='md:block hidden'>
+        <Sidebar />
+      </div>
       {!conversation ?
         <>
-          <div className="md:hidden w-full">
+          <div className="md:hidden block w-full">
             <Sidebar />
           </div>
           <div className="justify-center items-center hidden md:flex w-full h-[100dvh]">

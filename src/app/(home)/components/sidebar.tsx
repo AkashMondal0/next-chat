@@ -54,7 +54,7 @@ export default function Sidebar() {
 
 
     return (
-        <div className='md:block hidden'>
+        <div>
             <Card className="col-span-3 border-none">
                 <ScrollArea className={`h-[100dvh] w-full md:w-96 scroll-smooth`}>
                     <div className="flex justify-between w-full p-6 items-center">
@@ -74,7 +74,8 @@ export default function Sidebar() {
                             {ArrangeDateByeDate(data ? currentProfile.conversations : [])?.map((item) => {
                                 const otherUser = item.users.find(uid => uid.id !== currentProfile.state.id)
                                 return <>{otherUser?.id ?
-                                    <UserCard data={otherUser} key={item.id} item={item} /> : <UserCardLoading key={item.id} />}</>
+                                    <UserCard data={otherUser} key={item.id} item={item} />
+                                    : <UserCardLoading key={item.id} />}</>
                             })}
                         </div>
                     </CardContent>

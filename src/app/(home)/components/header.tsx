@@ -9,7 +9,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { SheetSide } from '@/components/shared/Sheet';
 import Sidebar from '@/app/(home)/components/sidebar';
 import { Button } from '@/components/ui/button';
-import { Menu } from 'lucide-react';
+import { ChevronLeft, Menu } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
     data: Conversation | undefined
@@ -19,19 +20,20 @@ const Header: FC<HeaderProps> = ({
     data
 }) => {
     const currentProfile = useClientProfile()
+    const router = useRouter()
     let userData = data?.users.find((user) => user.id !== currentProfile.state.id)
 
     return (
-        <div className={cn('navbar-blur', "w-full h-16 top-0 z-50 px-4 sticky")}>
+        <div className={cn('navbar-blur', "w-full h-16 top-0 z-50 px-2 sticky")}>
             <div className="flex justify-between items-center h-full w-full">
                 {/* logo */}
                 {userData ?
-                    <div className='flex items-center gap-3'>
-
+                    <div className='flex items-center gap-2'>
                         <div className='md:hidden'>
-                            <SheetSide trigger={<Menu size={30} className='cursor-pointer'/>}>
+                            {/* <SheetSide trigger={<Menu size={30} className='cursor-pointer'/>}>
                                 <Sidebar />
-                            </SheetSide>
+                            </SheetSide> */}
+                            <ChevronLeft size={30} onClick={() => router.push('/')} />
                         </div>
                         <>
                             <div className="flex items-center gap-2">
