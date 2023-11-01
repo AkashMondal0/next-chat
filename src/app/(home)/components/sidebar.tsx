@@ -39,6 +39,10 @@ export default function Sidebar() {
         queryFn: fetchUsers,
     })
 
+    const ArrangeDateByeDate = (data: Conversation[]) => {
+        return data?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+    }
+
     useEffect(() => {
         if (data) {
             currentProfile.setConversations(data as Conversation[])
@@ -67,7 +71,7 @@ export default function Sidebar() {
                                 {Array.from({ length: 10 }).map((_, i) => <UserCardLoading key={i} />)}
                             </div>}
                             {status === "error" && <div>{error?.message}</div>}
-                            {data?.map((item) => {
+                            {ArrangeDateByeDate(data ? currentProfile.conversations : [])?.map((item) => {
                                 const otherUser = item.users.find(uid => uid.id !== currentProfile.state.id)
                                 return <>{otherUser?.id ?
                                     <UserCard data={otherUser} key={item.id} item={item} /> : <UserCardLoading key={item.id} />}</>
@@ -87,7 +91,7 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     const currentProfile = useClientProfile()
     const searchParam = useSearchParams().get("id")
     const Scroll = useScrollToTop()
-    
+
 
     const seenCount = () => {
         return item.messages.filter((item) => item.memberId !== currentProfile.state.id).filter((item) => item.deleted === false)
@@ -151,7 +155,7 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
             </div>
         </div>
         <div className='w-20'>
-            <div className="ml-auto font-medium">{new Date(item.lastMessageTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
+            <div className="ml-auto font-medium">{new Date(item.updatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
             {searchParam !== item.id && seenCount().length > 0 ? <div className='rounded-full bg-black dark:bg-white mx-auto my-1
             text-white dark:text-black w-6 h-6 flex justify-center items-center'>
                 {seenCount().length || 0}

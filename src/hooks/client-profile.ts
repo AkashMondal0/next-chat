@@ -52,7 +52,7 @@ const useClientProfile = create<ProfileState>((set) => ({
                 if (!conversation.messages.find((message) => (message.id === data.id))) {
                     conversation.messages.push(data)
                     conversation.lastMessage = data.content
-                    conversation.lastMessageTime = new Date()
+                    conversation.updatedAt = new Date()
                 }
             }
             return conversation
