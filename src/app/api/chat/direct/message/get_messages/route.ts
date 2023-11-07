@@ -1,9 +1,10 @@
 import db from "@/lib/db";
-import { getSession } from "@auth0/nextjs-auth0";
+import { getCookie } from "cookies-next";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
-    const profile = await getSession();
+export async function GET(req: NextRequest,res:NextResponse) {
+
+    const profile = getCookie('profile', { req, res })
 
     if (!profile) {
         return NextResponse.json("Auth Failed", { status: 401 })
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest) {
                     userId: true,
                 }
             },
-            
+
         },
         orderBy: {
             createdAt: "asc"

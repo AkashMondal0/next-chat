@@ -11,6 +11,7 @@ import Sidebar from '@/app/(home)/components/sidebar';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface HeaderProps {
     data: Conversation | undefined
@@ -37,9 +38,10 @@ const Header: FC<HeaderProps> = ({
                         </div>
                         <>
                             <div className="flex items-center gap-2">
-                                <div className="w-12 h-12 rounded-full dark:bg-white bg-black">
-                                    <img src={userData?.imageUrl} alt="avatar" className="w-full h-full rounded-full object-cover" />
-                                </div>
+                                <Avatar className="h-12 w-12">
+                                    <AvatarImage src={userData.imageUrl} alt="Avatar" />
+                                    <AvatarFallback>{userData.name[0]}</AvatarFallback>
+                                </Avatar>
                                 <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex">{userData?.name}</h1>
                             </div>
                         </>

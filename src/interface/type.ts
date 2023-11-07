@@ -18,7 +18,6 @@ export type Notification = {
   
   export type User = {
     id: string;
-    userId: string;
     name: string;
     imageUrl: string;
     email: string;
@@ -29,8 +28,6 @@ export type Notification = {
     groups: Group[];
     createdAt: Date;
     updatedAt: Date;
-    SeenBy: SeenBy[];
-    GroupSeenBy: GroupSeenBy[];
   }
   
   export type Conversation = {

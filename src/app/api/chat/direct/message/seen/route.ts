@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
         receiverId,
         data,
     }
-    // console.log(data)
 
     return NextResponse.json(messageSeenSocket, { status: 200 });
 }

@@ -1,10 +1,17 @@
-// middleware.js
-import { withMiddlewareAuthRequired, getSession } from '@auth0/nextjs-auth0/edge';
-import { NextResponse } from 'next/server';
+import { getCookie } from 'cookies-next'
+import { NextResponse, NextRequest } from 'next/server'
 
-export default withMiddlewareAuthRequired(async function middleware(req) {
-    const res = NextResponse.next();
-    const user = await getSession(req, res);
-    res.cookies.set('hl', user?.language);
-    return res;
-});
+// This function can be marked `async` if using `await` inside
+export function middleware(req: NextRequest, res: NextResponse) {
+    const token = getCookie('profile', { req, res })
+    const url = req.nextUrl.clone()
+    url.pathname = '/auth'
+    if (token) {
+        return NextResponse.next()
+    } else {
+        return NextResponse.redirect(url)
+    }
+}
+export const config = {
+    matcher: '/',
+}

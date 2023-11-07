@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  reactStrictMode: true,
+  // experimental: {
+  //   appDir: true,
+  // },
   webpack5: true,
   webpack: (config) => {
     config.externals.push({
@@ -9,23 +11,8 @@ const nextConfig = {
       bufferutil: "commonjs bufferutil"
     });
     config.resolve.fallback = { fs: false };
-
     return config;
-  },
-  devIndicators: {
-    buildActivityPosition: 'bottom-right',
-  },
-  generateEtags: false,
-  httpAgentOptions: {
-    keepAlive: false,
-  },
-  images: {
-    unoptimized: true
-  },
-  i18n: {
-    locales: ['en-US'],
-    defaultLocale: 'en-US',
-  },
+  }
 };
 
 module.exports = nextConfig;

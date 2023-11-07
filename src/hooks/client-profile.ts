@@ -37,7 +37,6 @@ const useClientProfile = create<ProfileState>((set) => ({
             state: {
                 ...pre.state,
                 id: data.id,
-                userId: data.userId,
                 name: data.name,
                 imageUrl: data.imageUrl,
                 email: data.email,
