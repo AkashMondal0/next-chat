@@ -1,22 +1,26 @@
 "use client"
 import { messaging } from '@/firebase.config';
 import React, { useEffect } from 'react'
-import { getToken, isSupported, onMessage } from 'firebase/messaging';
+import { getToken, isSupported } from 'firebase/messaging';
+import { useMutation } from '@tanstack/react-query';
+import { updateProfileCloudMessageId } from '@/Query/user';
 
 
 const Notification_Provider = ({ children }: { children: React.ReactNode }) => {
 
+    const mutation = useMutation({ mutationFn: updateProfileCloudMessageId })
 
     const fun = async () => {
         const isSupportedBrowser = await isSupported();
         if (isSupportedBrowser) {
             await getToken(messaging as any,
-                { vapidKey: process.env.VAPIDKEY })
+                { vapidKey:process.env.NEXT_PUBLIC_FIREBASE_VAP_ID_KEY })
                 .then((currentToken) => {
                     if (currentToken) {
-                        // Send the token to your server and update the UI if necessary
                         // ...
-                        console.log(currentToken)
+                        // console.log(currentToken)
+                        // Send the token to your db for storing
+                        mutation.mutate(currentToken)
                     } else {
                         // Show permission request UI
                         console.log('No registration token available. Request permission to generate one.');
@@ -44,9 +48,6 @@ const Notification_Provider = ({ children }: { children: React.ReactNode }) => {
                 }
             });
         }
-        onMessage(messaging as any, (payload) => {
-            console.log('Message received. ', payload);
-        });
     }, [])
 
     return (

@@ -1,4 +1,4 @@
-import qs  from 'query-string';
+import qs from 'query-string';
 import axios from "axios"
 import { getCookie } from 'cookies-next';
 const token = getCookie('profile')
@@ -30,8 +30,21 @@ const getSearchUser = async () => {
     return res.data;
 }
 
+const updateProfileCloudMessageId = async (id: string) => {
+    const url = qs.stringifyUrl({
+        url: "/api/profile/update",
+        query: {
+            userId: token,
+            cloudId: id
+        }
+    });
+    const res = token && await axios.patch(url) || { data: null}
+    return res.data
+}
+
 export {
     getUserData,
     getUserConversation,
-    getSearchUser
+    getSearchUser,
+    updateProfileCloudMessageId
 }

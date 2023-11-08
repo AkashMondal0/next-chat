@@ -29,6 +29,7 @@ model User {
   email    String @db.Text
   phone    String @db.Text
   status   String @db.Text
+  cloudMessageId  String @db.Text
 
   notification  Notification[]
   conversations Conversation[]

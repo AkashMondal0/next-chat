@@ -29,6 +29,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
             phone: "",
             status: "",
             userId: data.id,
+            cloudMessageId: "",
         }
     })
 

@@ -1,4 +1,4 @@
 import io from 'socket.io-client';
-const socket = io(process.env.SOCKET_URL || "https://socket.skysolo.me/" as string);
+const socket = io(process.env.NEXT_PUBLIC_FIREBASE_SOCKET_URL as string);
 
 export default socket;

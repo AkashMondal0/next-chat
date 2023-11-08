@@ -21,6 +21,7 @@ CREATE TABLE `User` (
     `email` TEXT NOT NULL,
     `phone` TEXT NOT NULL,
     `status` TEXT NOT NULL,
+    `cloudMessageId` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
