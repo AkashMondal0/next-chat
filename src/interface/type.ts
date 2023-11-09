@@ -123,3 +123,16 @@ export type Notification = {
     receiverId?: string,
     typing: boolean
 }
+
+export type login_credential = {
+    email: string;
+    password: string;
+}
+
+export type register_credential = {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+    imageUrl?: string;
+}

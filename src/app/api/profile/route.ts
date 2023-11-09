@@ -1,11 +1,8 @@
 import db from "@/lib/db";
-import { getCookie } from "cookies-next";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, response: NextResponse) {
 
-    // get cookie
-    // const token = getCookie('profile', { req: request, res: response })
     const token = new URL(request.url).searchParams.get("userId");
 
     if (!token) {

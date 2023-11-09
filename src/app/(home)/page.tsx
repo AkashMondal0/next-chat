@@ -15,7 +15,6 @@ import ChatFooter from "./components/footer";
 import useScrollToTop from "@/hooks/scrollToBottom";
 import { useQuery } from "@tanstack/react-query";
 import { getUserData } from "@/Query/user";
-import Notification_Provider from "@/components/provider/Notificaiton_Provider";
 
 
 export default function Index() {
