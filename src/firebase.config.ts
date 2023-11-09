@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
-import { getMessaging, isSupported } from "firebase/messaging";
+// import { getMessaging, isSupported } from "firebase/messaging";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,11 +20,11 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
-const messaging = getMessaging(app);
+// const messaging = isSupported ? getMessaging(app):null;
 
 export {
     provider,
     auth,
-    messaging,
+    // messaging,
     app
 }

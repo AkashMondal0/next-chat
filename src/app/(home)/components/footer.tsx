@@ -34,13 +34,15 @@ const ChatFooter: FC<ChatFooterProps> = ({
             }
         });
         let res = await axios.post(url, newMessage)
-        const dataPush = {
-            registrationToken: currentProfile.state.cloudMessageId,
-            title: `${currentProfile.state.name} sent you a message`,
-            body: inputValue,
-            imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Olivia_Rodrigo_with_Dr_Fauci_1.png/640px-Olivia_Rodrigo_with_Dr_Fauci_1.png"
-        }
-        pushNotification(dataPush)
+        
+        // send notification
+        // const dataPush = {
+        //     registrationToken: currentProfile.state.cloudMessageId,
+        //     title: `${currentProfile.state.name} sent you a message`,
+        //     body: inputValue,
+        //     imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Olivia_Rodrigo_with_Dr_Fauci_1.png/640px-Olivia_Rodrigo_with_Dr_Fauci_1.png"
+        // }
+        // pushNotification(dataPush)
         return res
     }
 

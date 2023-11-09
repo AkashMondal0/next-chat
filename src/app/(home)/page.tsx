@@ -75,7 +75,7 @@ export default function Index() {
               </div>
             </> :
             <ScrollArea className={`h-[100dvh] w-full rounded-md border scroll-smooth`}>
-              <Notification_Provider/>
+              {/* <Notification_Provider/> */}
               <Header data={conversation} />
               <ChatBody data={conversation} />
               <ChatFooter data={conversation} />
