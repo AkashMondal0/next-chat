@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { updateProfileCloudMessageId } from '@/Query/user';
 
 
-const Notification_Provider = ({ children }: { children: React.ReactNode }) => {
+const Notification_Provider = ({ children }: { children?: React.ReactNode }) => {
 
     const mutation = useMutation({ mutationFn: updateProfileCloudMessageId })
 
@@ -52,7 +52,6 @@ const Notification_Provider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <>
-            {children}
         </>
     )
 }

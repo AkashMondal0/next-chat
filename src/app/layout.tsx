@@ -4,7 +4,6 @@ import { ThemeProvider } from '@/components/provider/Theme_Provider'
 import { cn } from '@/lib/utils'
 import React_Query from '@/components/provider/React-Query_Provider'
 import { Metadata } from 'next'
-import Notification_Provider from '@/components/provider/Notificaiton_Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,9 +28,7 @@ export default async function RootLayout({
           attribute='class'
           storageKey="theme">
             <React_Query>
-              <Notification_Provider>
               {children}
-              </Notification_Provider>
             </React_Query>
         </ThemeProvider>
       </body>

@@ -23,6 +23,7 @@ export type Notification = {
     email: string;
     phone: string;
     status: string;
+    cloudMessageId: string;
     notification: Notification[];
     conversations: Conversation[];
     groups: Group[];

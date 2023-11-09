@@ -15,6 +15,7 @@ import ChatFooter from "./components/footer";
 import useScrollToTop from "@/hooks/scrollToBottom";
 import { useQuery } from "@tanstack/react-query";
 import { getUserData } from "@/Query/user";
+import Notification_Provider from "@/components/provider/Notificaiton_Provider";
 
 
 export default function Index() {
@@ -74,6 +75,7 @@ export default function Index() {
               </div>
             </> :
             <ScrollArea className={`h-[100dvh] w-full rounded-md border scroll-smooth`}>
+              <Notification_Provider/>
               <Header data={conversation} />
               <ChatBody data={conversation} />
               <ChatFooter data={conversation} />

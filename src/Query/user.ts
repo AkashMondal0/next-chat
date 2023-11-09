@@ -1,6 +1,7 @@
 import qs from 'query-string';
 import axios from "axios"
 import { getCookie } from 'cookies-next';
+import { User } from '@/interface/type';
 const token = getCookie('profile')
 
 const getUserData = async () => {
@@ -38,7 +39,18 @@ const updateProfileCloudMessageId = async (id: string) => {
             cloudId: id
         }
     });
-    const res = token && await axios.patch(url) || { data: null}
+    const res = token && await axios.patch(url) || { data: null }
+    return res.data
+}
+interface PushNotification {
+    registrationToken: string,
+    title: string,
+    body: string,
+    imageUrl: string
+}
+const pushNotification = async (data:PushNotification) => {
+    const url = "http://localhost:3003/cloudMessage"
+    const res = await axios.post(url, data)
     return res.data
 }
 
@@ -46,5 +58,6 @@ export {
     getUserData,
     getUserConversation,
     getSearchUser,
-    updateProfileCloudMessageId
+    updateProfileCloudMessageId,
+    pushNotification
 }

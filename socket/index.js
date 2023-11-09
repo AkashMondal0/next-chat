@@ -1,9 +1,19 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3003;
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+})
+
+const firebase_Notification = admin.messaging();
 
 const http = require('http').Server(app);
 const cors = require('cors');
+app.use(express.json());
 
 app.use(cors());
 
@@ -61,9 +71,32 @@ socketIO.on('connection', (socket) => {
   });
 
 });
-
 app.get('/', (req, res) => {
-  res.send('chat socket v1.0.0');
+  res.send('Hello World');
+});
+
+app.post('/cloudMessage', (req, res) => {
+
+  const data = {
+    registrationToken: req.body.registrationToken,
+    title: req.body.title,
+    body: req.body.body,
+    imageUrl: req.body.imageUrl,
+  }
+console.log(data)
+  firebase_Notification.send({
+    token: data.registrationToken,
+    notification: {
+      title: data.title,
+      body: data.body,
+      imageUrl: data.imageUrl
+    },
+    topic: "test"
+  }).then((response) => {
+    res.send('Notification sent');
+  }).catch((error) => {
+    console.log(error)
+  });
 });
 
 http.listen(PORT, () => {

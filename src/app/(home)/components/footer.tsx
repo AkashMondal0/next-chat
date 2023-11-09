@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import useClientProfile from '@/hooks/client-profile';
 import { Conversation, MessageDirect, typingState } from '@/interface/type';
 import { cn } from '@/lib/utils';
@@ -9,6 +8,7 @@ import qs from "query-string"
 import { useMutation, useQuery } from '@tanstack/react-query'
 import socket from '@/lib/socket';
 import { Send } from 'lucide-react';
+import { pushNotification } from '@/Query/user';
 interface ChatFooterProps {
     data: Conversation | undefined
 }
@@ -34,6 +34,13 @@ const ChatFooter: FC<ChatFooterProps> = ({
             }
         });
         let res = await axios.post(url, newMessage)
+        const dataPush = {
+            registrationToken: currentProfile.state.cloudMessageId,
+            title: `${currentProfile.state.name} sent you a message`,
+            body: inputValue,
+            imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Olivia_Rodrigo_with_Dr_Fauci_1.png/640px-Olivia_Rodrigo_with_Dr_Fauci_1.png"
+        }
+        pushNotification(dataPush)
         return res
     }
 
