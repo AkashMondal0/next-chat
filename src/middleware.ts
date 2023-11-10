@@ -12,9 +12,6 @@ export function middleware(req: NextRequest, res: NextResponse) {
     if (token) {
         return NextResponse.next()
     }
-    // else if (!token && ignorePaths) {
-    //     return NextResponse.next()
-    // }
     else {
         if (req.nextUrl.pathname.includes('/api')) {
             if (ignorePaths) {

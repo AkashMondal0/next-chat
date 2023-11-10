@@ -17,29 +17,47 @@ import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { userLogin, userRegister } from "@/Query/user"
 import { useToast } from "@/components/ui/use-toast"
+import useClientProfile from "@/hooks/client-profile"
 
 export default function AuthenticationPage() {
-    const router = useRouter()
-    const { toast } = useToast()
-    const mutationLogin = useMutation({ mutationFn: userLogin })
-    const mutationRegister = useMutation({ mutationFn: userRegister })
-
     const [input, setInput] = useState({
         email: "",
         password: "",
         name: "",
         signUp: false
     })
+    const router = useRouter()
+    const currentProfile = useClientProfile()
+    const { toast } = useToast()
+    const mutationLogin = useMutation({
+        mutationFn: userLogin,
+    })
+    const mutationRegister = useMutation({
+        mutationFn: userRegister,
+    })
+
 
     useEffect(() => {
         if (mutationLogin.data || mutationRegister.data) {
-            router.refresh()
-            window.location.replace("/")
+            currentProfile.setLoginToken(mutationLogin.data || mutationRegister.data)
+            router.push("/")
         }
-        if (mutationLogin.error || mutationRegister.error) {
+        if (mutationLogin.error && !input.signUp) {
             toast({
-                title: `${mutationLogin.error ? "Login" : "Register"} Failed`,
-                description: mutationLogin.error?.message || mutationRegister.error?.message,
+                title: `Login Failed`,
+                // @ts-ignore
+                description: mutationLogin.error?.response.data,
+                action: (
+                    <>
+                    </>
+                ),
+            })
+        }
+        if (mutationRegister.error && input.signUp) {
+            toast({
+                title: `Register Failed`,
+                // @ts-ignore
+                description: mutationRegister.error?.response.data,
                 action: (
                     <>
                     </>

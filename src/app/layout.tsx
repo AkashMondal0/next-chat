@@ -29,8 +29,8 @@ export default async function RootLayout({
           attribute='class'
           storageKey="theme">
           <React_Query>
-              <Toaster />
-              {children}
+            <Toaster />
+            {children}
           </React_Query>
         </ThemeProvider>
       </body>

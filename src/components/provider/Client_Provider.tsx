@@ -21,19 +21,21 @@ const Client_Provider: FC<Client_ProviderProps> = ({
 
     const { status, data, error } = useQuery<User>({
         queryKey: ['userData'],
-        queryFn: userData,
+        queryFn: () => userData(currentProfile.loginToken),
     })
 
     useEffect(() => {
         if (data) {
-            socket.emit('user_connect', {
-                id: data.id
-            })
             currentProfile.setState({ ...currentProfile.state, ...data })
         }
     }, [data])
 
     useEffect(() => {
+        if (currentProfile.state.id) {
+            socket.emit('user_connect', {
+                id: currentProfile.state.id
+            })
+        }
         socket.on('message_for_user', (data: MessageDirect) => {
             currentProfile.updateConversation(data)
             if (data.conversationId === searchParam) {
@@ -43,7 +45,7 @@ const Client_Provider: FC<Client_ProviderProps> = ({
         return () => {
             socket.off('message_for_user')
         }
-    }, [socket, searchParam])
+    }, [socket, searchParam, currentProfile.state.id])
 
     if (error) {
         <div>User Fetch error</div>

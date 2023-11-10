@@ -20,6 +20,53 @@ const getSearchUser = async () => {
     return res.data;
 }
 
+const userLogin = async (data: login_credential) => {
+    const res = await axios.post('/api/authentication/login', data)
+    setCookie("profile", res.data, {
+        maxAge: 60 * 60,
+    })
+    return res.data
+}
+
+const userRegister = async (data: register_credential) => {
+    const res = await axios.post('/api/authentication/register', data)
+    setCookie("profile", res.data, {
+        maxAge: 60 * 60,
+    })
+    return res.data
+}
+
+const userLogout = async () => {
+    deleteCookie("profile")
+}
+
+const userData = async (SignInToken: string) => {
+    if (token || SignInToken) {
+        const url = qs.stringifyUrl({
+            url: "/api/authentication/authorize",
+            query: {
+                token: token || SignInToken
+            }
+        });
+        const res = await axios.get(url)
+        return res.data
+    } else {
+        throw new Error("No token")
+    }
+}
+
+export {
+    getUserConversation,
+    getSearchUser,
+    userLogin,
+    userRegister,
+    userLogout,
+    userData
+}
+
+// updateProfileCloudMessageId,
+// pushNotification,
+
 // const updateProfileCloudMessageId = async (id: string) => {
 //     const url = qs.stringifyUrl({
 //         url: "/api/profile/update",
@@ -42,57 +89,3 @@ const getSearchUser = async () => {
 //     const res = await axios.post(url, data)
 //     return res.data
 // }
-
-const userLogin = async (data: login_credential) => {
-    const res = await axios.post('/api/authentication/login', data)
-    setCookie("profile", res.data, {
-        maxAge: 60 * 60,
-    })
-    if (res.status === 401) {
-        return new Error("email incorrect")
-    } else {
-        return res.data
-    }
-}
-const userRegister = async (data: register_credential) => {
-    const res = await axios.post('/api/authentication/register', data)
-    setCookie("profile", res.data, {
-        maxAge: 60 * 60,
-    })
-    return res.data
-}
-const userLogout = async () => {
-    deleteCookie("profile")
-}
-const userData = async () => {
-    if (token) {
-        const url = qs.stringifyUrl({
-            url: "/api/authentication/authorize",
-            query: {
-                token: token
-            }
-        });
-        const res = await axios.get(url)
-        return res.data
-    }else{
-        throw new Error("token not found")
-    }
-}
-
-const userAuthorized = () => {
-    const token = getCookie('profile')
-    return token
-}
-
-export {
-    // getUserData,
-    userAuthorized,
-    getUserConversation,
-    getSearchUser,
-    // updateProfileCloudMessageId,
-    // pushNotification,
-    userLogin,
-    userRegister,
-    userLogout,
-    userData
-}
