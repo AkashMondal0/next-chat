@@ -8,7 +8,7 @@ import qs from "query-string"
 import { useMutation, useQuery } from '@tanstack/react-query'
 import socket from '@/lib/socket';
 import { Send } from 'lucide-react';
-import { pushNotification } from '@/Query/user';
+// import { pushNotification } from '@/Query/user';
 interface ChatFooterProps {
     data: Conversation | undefined
 }
@@ -28,7 +28,7 @@ const ChatFooter: FC<ChatFooterProps> = ({
         }
         setInputValue("")
         const url = qs.stringifyUrl({
-            url: "/api/chat/direct/message",
+            url: "/api/chat/direct/message/send",
             query: {
                 receiverId: userData?.id,
             }

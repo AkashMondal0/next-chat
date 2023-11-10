@@ -6,7 +6,7 @@ import useScrollToTop from '@/hooks/scrollToBottom';
 import { MessageDirect, User } from '@/interface/type';
 import socket from '@/lib/socket';
 import { useQuery } from '@tanstack/react-query';
-import {useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { FC, useEffect } from 'react';
 
 interface Client_ProviderProps {
@@ -26,17 +26,14 @@ const Client_Provider: FC<Client_ProviderProps> = ({
 
     useEffect(() => {
         if (data) {
+            socket.emit('user_connect', {
+                id: data.id
+            })
             currentProfile.setState({ ...currentProfile.state, ...data })
         }
     }, [data])
 
     useEffect(() => {
-        if (currentProfile.state.id) {
-            // connect to socket
-            socket.emit('user_connect', {
-                id: currentProfile.state.id
-            })
-        }
         socket.on('message_for_user', (data: MessageDirect) => {
             currentProfile.updateConversation(data)
             if (data.conversationId === searchParam) {
@@ -54,7 +51,7 @@ const Client_Provider: FC<Client_ProviderProps> = ({
 
     return (
         <>
-        {children}
+            {children}
         </>
     );
 };

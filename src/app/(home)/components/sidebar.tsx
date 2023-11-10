@@ -34,7 +34,7 @@ export default function Sidebar() {
         return data
     }
 
-    const { status, data, error, refetch, } = useQuery({
+    const { status, data, error, refetch} = useQuery({
         queryKey: ['user_chat_list'],
         queryFn: fun,
         enabled: currentProfile.state.id ? true : false,
@@ -54,7 +54,6 @@ export default function Sidebar() {
         return () => {
             socket.off('user_chat_list')
         }
-
     }, [data, socket])
 
 
