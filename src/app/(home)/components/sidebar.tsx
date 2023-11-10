@@ -9,8 +9,6 @@ import {
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -30,10 +28,17 @@ import { getUserConversation } from '@/Query/user';
 
 export default function Sidebar() {
     const currentProfile = useClientProfile()
-    const { status, data, error, refetch } = useQuery<Conversation[]>({
-        queryKey: ['getUserConversation'],
-        queryFn: getUserConversation,
-    })
+
+    const fun = async () => {
+        let data = await getUserConversation(currentProfile.state.id)
+        return data
+    }
+
+    const { status, data, error, refetch, } = useQuery({
+        queryKey: ['user_chat_list'],
+        queryFn: fun,
+        enabled: currentProfile.state.id ? true : false,
+    });
 
     const ArrangeDateByeDate = (data: Conversation[]) => {
         return data?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
@@ -46,11 +51,10 @@ export default function Sidebar() {
         socket.on('user_chat_list', () => {
             refetch()
         })
-        // console.log(data)
         return () => {
             socket.off('user_chat_list')
         }
-        
+
     }, [data, socket])
 
 

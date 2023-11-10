@@ -16,7 +16,7 @@ type ProfileState = {
 const useClientProfile = create<ProfileState>((set) => ({
     state: {
         id: '',
-        userId: '',
+        cloudMessageId: '',
         name: '',
         imageUrl: '',
         email: '',

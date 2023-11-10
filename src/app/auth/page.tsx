@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,16 +13,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Github } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect } from "firebase/auth"
-import { auth, provider } from "@/firebase.config"
-import { useState } from "react"
-import useClientProfile from "@/hooks/client-profile"
-import axios from "axios"
-import { setCookie } from 'cookies-next';
+import { useEffect, useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { userLogin, userRegister } from "@/Query/user"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function AuthenticationPage() {
     const router = useRouter()
-    const currentProfile = useClientProfile()
+    const { toast } = useToast()
+    const mutationLogin = useMutation({ mutationFn: userLogin })
+    const mutationRegister = useMutation({ mutationFn: userRegister })
+
     const [input, setInput] = useState({
         email: "",
         password: "",
@@ -29,41 +31,28 @@ export default function AuthenticationPage() {
         signUp: false
     })
 
+    useEffect(() => {
+        if (mutationLogin.data || mutationRegister.data) {
+            router.refresh()
+            window.location.replace("/")
+        }
+        if (mutationLogin.error || mutationRegister.error) {
+            toast({
+                title: `${mutationLogin.error ? "Login" : "Register"} Failed`,
+                description: mutationLogin.error?.message || mutationRegister.error?.message,
+                action: (
+                    <>
+                    </>
+                ),
+            })
+        }
+    }, [mutationLogin.data, mutationRegister.data, mutationLogin.error, mutationRegister.error])
+
     const handle = async () => {
-        input.signUp ?
-            await createUserWithEmailAndPassword(auth, input.email, input.password)
-                .then((user) => {
-                    axios.post("/api/profile/create", {
-                        id: user.user.uid,
-                        email: user.user.email,
-                        name: input.name,
-                    }).then((response) => {
-                        setCookie("profile", user.user.uid,{
-                            // one hour
-                            maxAge: 60 * 60,
-                        })
-                        currentProfile.setState(response.data)
-                        router.replace("/")
-                    })
-                }
-                ).catch((error) => {
-                    console.log(error)
-                })
-            :
-            await signInWithEmailAndPassword(auth, input.email, input.password)
-                .then((user) => {
-                    setCookie("profile", user.user.uid,{
-                        // one hour
-                        maxAge: 60 * 60,
-                    })
-                    router.replace("/")
-                }).catch((error) => {
-                    console.log(error)
-                })
+        input.signUp ? mutationRegister.mutate(input) : mutationLogin.mutate(input)
     }
 
     const signWithGoogle = async () => {
-        signInWithRedirect(auth, provider)
     }
 
     return (
@@ -130,7 +119,9 @@ export default function AuthenticationPage() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button className="w-full" onClick={handle}>
+                    <Button
+                        disabled={mutationLogin.isPending || mutationRegister.isPending}
+                        className="w-full" onClick={handle}>
                         {input.signUp ? "Sign Up" : "Sign In"}
                     </Button>
                 </CardFooter>

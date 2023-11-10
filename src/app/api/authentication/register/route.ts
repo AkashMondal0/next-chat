@@ -10,10 +10,11 @@ const secret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 export async function POST(req: NextRequest) {
 
+  try {
     const data: register_credential = await req.json()
 
     if (!data.email && !data.password) {
-        return NextResponse.json({ message: "Email is required" }, { status: 404 });
+        return new NextResponse("email and password is required", { status: 400 });
     }
 
     const alreadyUser = await db.user.findUnique({
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (alreadyUser) {
-        return NextResponse.json({ message: "User already exist" }, { status: 404 });
+        return new NextResponse("user already exist", { status: 401 });
     }
 
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -45,4 +46,8 @@ export async function POST(req: NextRequest) {
     const token = jwt.sign({ id: newUser.id }, secret as string, { expiresIn: "1h" })
 
     return NextResponse.json(token , { status: 200 })
+  } catch (error) {
+    console.log(error)
+    return new NextResponse("Internal Error", { status: 500 })
+  }
 }

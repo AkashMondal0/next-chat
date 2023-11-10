@@ -7,25 +7,30 @@ const secret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 export async function POST(req: NextRequest) {
 
-    const data: login_credential = await req.json()
+    try {
+        const data: login_credential = await req.json()
 
-    const user = await db.user.findUnique({
-        where: {
-            email: data.email,
+        const user = await db.user.findUnique({
+            where: {
+                email: data.email,
+            }
+        })
+
+        if (!user) {
+            return new NextResponse("email incorrect", { status: 401 });
         }
-    })
 
-    if (!user) {
-        return NextResponse.json({ message: "User not found" }, { status: 404 });
+        const checkPassword = await bcrypt.compare(data.password, user.password)
+
+        if (!checkPassword) {
+            return new NextResponse("password incorrect", { status: 401 });
+        }
+
+        const token = jwt.sign({ id: user.id }, secret as string, { expiresIn: "1h" })
+
+        return NextResponse.json(token, { status: 200 })
+    } catch (error) {
+        console.log(error)
+        return new NextResponse("Internal Error", { status: 500 })
     }
-
-    const checkPassword = await bcrypt.compare(data.password, user.password)
-
-    if (!checkPassword) {
-        return NextResponse.json({ message: "Password is incorrect" }, { status: 404 });
-    }
-
-    const token = jwt.sign({ id: user.id }, secret as string, { expiresIn: "1h" })
-
-    return NextResponse.json(token, { status: 200 })
 }

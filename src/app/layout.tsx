@@ -4,6 +4,8 @@ import { ThemeProvider } from '@/components/provider/Theme_Provider'
 import { cn } from '@/lib/utils'
 import React_Query from '@/components/provider/React-Query_Provider'
 import { Metadata } from 'next'
+import { Toaster } from '@/components/ui/toaster'
+import Client_Provider from '@/components/provider/Client_Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +19,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  
+
   return (
     <html lang="en">
       <body className={cn(inter.className,
@@ -27,9 +29,12 @@ export default async function RootLayout({
           enableSystem
           attribute='class'
           storageKey="theme">
-            <React_Query>
+          <React_Query>
+            <Client_Provider>
+              <Toaster />
               {children}
-            </React_Query>
+            </Client_Provider>
+          </React_Query>
         </ThemeProvider>
       </body>
     </html>
