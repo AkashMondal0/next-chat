@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "./components/header";
 import ChatBody from "./components/body";
 import ChatFooter from "./components/footer";
+import Client_Provider from "@/components/provider/Client_Provider";
 
 
 export default function Index() {
@@ -17,6 +18,7 @@ export default function Index() {
 
   return (
     <>
+      <Client_Provider />
       <div className="flex w-full">
         <div className='md:block hidden'>
           <Sidebar />

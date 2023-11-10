@@ -1,6 +1,6 @@
 import qs from 'query-string';
 import axios from "axios"
-import { getCookie, setCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { login_credential, register_credential } from '@/interface/type';
 const token = getCookie('profile')
 
@@ -62,22 +62,31 @@ const userRegister = async (data: register_credential) => {
     return res.data
 }
 const userLogout = async () => {
-    const res = await axios.post('/api/authentication/logout')
-    return res.data
+    deleteCookie("profile")
 }
 const userData = async () => {
-    const url = qs.stringifyUrl({
-        url: "/api/authentication/authorize",
-        query: {
-            token: token
-        }
-    });
-    const res = await axios.get(url)
-    return res.data
+    if (token) {
+        const url = qs.stringifyUrl({
+            url: "/api/authentication/authorize",
+            query: {
+                token: token
+            }
+        });
+        const res = await axios.get(url)
+        return res.data
+    }else{
+        throw new Error("token not found")
+    }
+}
+
+const userAuthorized = () => {
+    const token = getCookie('profile')
+    return token
 }
 
 export {
     // getUserData,
+    userAuthorized,
     getUserConversation,
     getSearchUser,
     // updateProfileCloudMessageId,

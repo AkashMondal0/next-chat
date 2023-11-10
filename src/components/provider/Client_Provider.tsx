@@ -51,7 +51,6 @@ const Client_Provider: FC<Client_ProviderProps> = ({
 
     return (
         <>
-            {children}
         </>
     );
 };

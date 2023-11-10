@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 import React_Query from '@/components/provider/React-Query_Provider'
 import { Metadata } from 'next'
 import { Toaster } from '@/components/ui/toaster'
-import Client_Provider from '@/components/provider/Client_Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,10 +29,8 @@ export default async function RootLayout({
           attribute='class'
           storageKey="theme">
           <React_Query>
-            <Client_Provider>
               <Toaster />
               {children}
-            </Client_Provider>
           </React_Query>
         </ThemeProvider>
       </body>

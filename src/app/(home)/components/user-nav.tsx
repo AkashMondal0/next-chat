@@ -1,4 +1,5 @@
 'use client'
+import { userLogout } from "@/Query/user";
 import {
   Avatar,
   AvatarFallback,
@@ -15,11 +16,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { auth } from "@/firebase.config";
 import useClientProfile from "@/hooks/client-profile";
-import { deleteCookie } from "cookies-next";
-import { sign } from "crypto";
-import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation"
 
 export function UserNav() {
@@ -66,10 +63,8 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => {
-          signOut(auth).then(() => {
-            deleteCookie("profile")
-            router.replace("/auth")
-          })
+          userLogout()
+          router.replace("/auth")
         }}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
