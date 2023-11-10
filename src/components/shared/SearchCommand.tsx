@@ -20,8 +20,8 @@ import useClientProfile from "@/hooks/client-profile"
 interface SearchCommandProps {
   data: User[] | undefined
   secondaryData?: search_data_user[]
-  status?: 'pending' | 'error' | 'success'
-  error?: string
+  status?: boolean
+  error?: any
 }
 export default function SearchCommand({
   data,
@@ -33,9 +33,9 @@ export default function SearchCommand({
     <Command className="rounded-lg border shadow-md">
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
-        {status === "error" && <CommandEmpty>{error}</CommandEmpty>}
+        {error && <CommandEmpty>{error.message}</CommandEmpty>}
         <CommandGroup heading="Result">
-          {status === "pending" ?
+          {status ?
             <Loader2 className='animate-spin text-zinc-500 mx-auto w-16 h-16 mb-8' /> :
             <>{data?.map((item, index) => <UserItem key={item.id} data={item} />)}</>}
         </CommandGroup>

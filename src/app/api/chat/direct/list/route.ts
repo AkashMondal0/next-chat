@@ -1,15 +1,21 @@
 import db from "@/lib/db";
-import { getSession } from "@auth0/nextjs-auth0";
-import { NextResponse } from "next/server";
+import { getCookie } from "cookies-next";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-    const profile = await getSession();
+export async function GET(request:NextRequest, response:NextResponse) {
+
+    // const profileId = getCookie('profile', { req: request, res: response })
+    const profileId = new URL(request.url).searchParams.get("userId");
+
+    if (!profileId) {
+        return NextResponse.json({ message: "No token found" }, { status: 404 });
+    }
 
     const userList = await db.conversation.findMany({
         where: {
             users: {
                 some: {
-                    id: profile?.user.sid
+                    id: profileId
                 }
             }
         },

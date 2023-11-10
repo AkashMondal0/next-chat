@@ -2,10 +2,9 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/provider/Theme_Provider'
 import { cn } from '@/lib/utils'
-import Auth0_Provider from '@/components/provider/Auth0_Provider'
 import React_Query from '@/components/provider/React-Query_Provider'
 import { Metadata } from 'next'
-import getInitialProfile from '@/lib/user/initial-profile'
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,7 +18,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  await getInitialProfile()
+
   return (
     <html lang="en">
       <body className={cn(inter.className,
@@ -29,11 +28,10 @@ export default async function RootLayout({
           enableSystem
           attribute='class'
           storageKey="theme">
-          <Auth0_Provider>
-            <React_Query>
-              {children}
-            </React_Query>
-          </Auth0_Provider>
+          <React_Query>
+            <Toaster />
+            {children}
+          </React_Query>
         </ThemeProvider>
       </body>
     </html>

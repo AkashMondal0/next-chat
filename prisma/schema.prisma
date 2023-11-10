@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
@@ -22,12 +23,14 @@ model Notification {
 // chat app schemas
 model User {
   id       String @id @default(uuid())
-  userId   String @unique
+  userId   String
   name     String
   imageUrl String @db.Text
-  email    String @db.Text
+  email    String @unique
+  password String 
   phone    String @db.Text
   status   String @db.Text
+  cloudMessageId  String @db.Text
 
   notification  Notification[]
   conversations Conversation[]

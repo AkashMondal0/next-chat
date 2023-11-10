@@ -4,6 +4,8 @@ import { create } from 'zustand'
 
 type ProfileState = {
     state: User
+    loginToken: string
+    setLoginToken: (data: string) => void
     conversations: Conversation[]
     groups: Group[]
     setState: (data: User) => void
@@ -16,7 +18,7 @@ type ProfileState = {
 const useClientProfile = create<ProfileState>((set) => ({
     state: {
         id: '',
-        userId: '',
+        cloudMessageId: '',
         name: '',
         imageUrl: '',
         email: '',
@@ -30,14 +32,15 @@ const useClientProfile = create<ProfileState>((set) => ({
         SeenBy: [],
         GroupSeenBy: []
     },
+    loginToken: '',
     conversations: [],
     groups: [],
+    setLoginToken: (data) => set({ loginToken: data }),
     setState: (data) => set((pre) => {
         return {
             state: {
                 ...pre.state,
                 id: data.id,
-                userId: data.userId,
                 name: data.name,
                 imageUrl: data.imageUrl,
                 email: data.email,

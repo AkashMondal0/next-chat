@@ -9,8 +9,6 @@ import {
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -26,18 +24,21 @@ import socket from '@/lib/socket';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import useScrollToTop from '@/hooks/scrollToBottom';
+import { getUserConversation } from '@/Query/user';
 
-const fetchUsers = async () => {
-    const res = await axios.get('/api/chat/direct/list')
-    return res.data
-}
 export default function Sidebar() {
     const currentProfile = useClientProfile()
 
-    const { status, data, error, refetch } = useQuery<Conversation[]>({
-        queryKey: ['chatList'],
-        queryFn: fetchUsers,
-    })
+    const fun = async () => {
+        let data = await getUserConversation(currentProfile.state.id)
+        return data
+    }
+
+    const { status, data, error, refetch} = useQuery({
+        queryKey: ['user_chat_list'],
+        queryFn: fun,
+        enabled: currentProfile.state.id ? true : false,
+    });
 
     const ArrangeDateByeDate = (data: Conversation[]) => {
         return data?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
@@ -50,6 +51,9 @@ export default function Sidebar() {
         socket.on('user_chat_list', () => {
             refetch()
         })
+        return () => {
+            socket.off('user_chat_list')
+        }
     }, [data, socket])
 
 

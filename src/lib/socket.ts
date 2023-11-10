@@ -1,5 +1,3 @@
 import io from 'socket.io-client';
-//"https://socket.skysolo.me/" ||
-const socket = io("http://192.168.31.232:3003" as string);
-
+const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string);
 export default socket;

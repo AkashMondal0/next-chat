@@ -18,19 +18,17 @@ export type Notification = {
   
   export type User = {
     id: string;
-    userId: string;
     name: string;
     imageUrl: string;
     email: string;
     phone: string;
     status: string;
+    cloudMessageId: string;
     notification: Notification[];
     conversations: Conversation[];
     groups: Group[];
     createdAt: Date;
     updatedAt: Date;
-    SeenBy: SeenBy[];
-    GroupSeenBy: GroupSeenBy[];
   }
   
   export type Conversation = {
@@ -124,4 +122,17 @@ export type Notification = {
     senderId?: string,
     receiverId?: string,
     typing: boolean
+}
+
+export type login_credential = {
+    email: string;
+    password: string;
+}
+
+export type register_credential = {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+    imageUrl?: string;
 }
