@@ -25,6 +25,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import useScrollToTop from '@/hooks/scrollToBottom';
 import { getUserConversation } from '@/Query/user';
+import SheetCreateGroup from '@/components/modal/Create_Group';
 
 export default function Sidebar() {
     const currentProfile = useClientProfile()
@@ -68,6 +69,7 @@ export default function Sidebar() {
                     <CardContent className='p-0'>
                         <div className='flex justify-between items-center w-full mb-2 px-4'>
                             <SearchModal />
+                            <SheetCreateGroup/>
                             <Button variant={"ghost"}><Bell className='w-6 h-6 cursor-pointer' /></Button>
                         </div>
                         <div className='px-2'>

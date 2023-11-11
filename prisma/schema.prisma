@@ -1,11 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Notification {
@@ -18,19 +19,28 @@ model Notification {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   messageCount Int      @default(0)
+
+  @@index([userId])
+}
+
+model UserHistory {
+  id          String @id @default(uuid())
+  searchUsers User[]
+  userId      String
 }
 
 // chat app schemas
 model User {
-  id       String @id @default(uuid())
-  userId   String
-  name     String
-  imageUrl String @db.Text
-  email    String @unique
-  password String 
-  phone    String @db.Text
-  status   String @db.Text
-  cloudMessageId  String @db.Text
+  id             String        @id @default(uuid())
+  userId         String
+  name           String
+  imageUrl       String        @db.Text
+  email          String        @unique
+  password       String
+  phone          String        @db.Text
+  status         String        @db.Text
+  cloudMessageId String        @db.Text
+  userHistory    UserHistory[]
 
   notification  Notification[]
   conversations Conversation[]
@@ -58,6 +68,8 @@ model SeenBy {
   messageId String
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+
+  @@index([messageId])
 }
 
 model MessageDirect {
@@ -72,6 +84,8 @@ model MessageDirect {
   seenBy         SeenBy[]
   Conversation   Conversation? @relation(fields: [conversationId], references: [id])
   conversationId String
+
+  @@index([conversationId])
 }
 
 // group chat schemas
@@ -85,9 +99,11 @@ model Group {
   lastMessage     String    @db.Text
   lastMessageTime DateTime  @default(now())
   messages        Message[]
-  author          User?     @relation(fields: [authorId], references: [id])
   authorId        String?
+  users           User[]
   messageCount    Int       @default(0)
+
+  @@index([authorId])
 }
 
 enum MemberRole {
@@ -100,11 +116,13 @@ model Member {
   id        String     @id @default(uuid())
   role      MemberRole @default(MEMBER)
   userId    String
-  // user        User          @relation(fields: [userId], references: [id])
+  // user      User     @relation(fields: [userId], references: [userId])      
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   groupId   String
   group     Group      @relation(fields: [groupId], references: [id])
+
+  @@index([groupId])
 }
 
 model GroupSeenBy {
@@ -115,6 +133,8 @@ model GroupSeenBy {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   messageDirectId String?
+
+  @@index([messageId])
 }
 
 model Message {
@@ -129,4 +149,6 @@ model Message {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([groupId])
 }

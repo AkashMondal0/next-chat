@@ -12,7 +12,8 @@ export async function POST(req: NextRequest) {
             }
         },
         data: {
-            deleted: true
+            deleted: true,
+            seen: true,
         },
     });
 
