@@ -5,10 +5,9 @@ import useClientProfile from '@/hooks/client-profile';
 import useScrollToTop from '@/hooks/scrollToBottom';
 import { MessageDirect, User } from '@/interface/type';
 import socket from '@/lib/socket';
-import { useQuery } from '@tanstack/react-query';
+import { getCookie } from 'cookies-next';
 import { useSearchParams } from 'next/navigation';
 import { FC, useEffect } from 'react';
-
 interface Client_ProviderProps {
     children?: React.ReactNode
 }
@@ -19,16 +18,15 @@ const Client_Provider: FC<Client_ProviderProps> = ({
     const searchParam = useSearchParams().get("id")
     const scrollIntoView = useScrollToTop()
 
-    const { status, data, error } = useQuery<User>({
-        queryKey: ['userData'],
-        queryFn: () => userData(currentProfile.loginToken),
-    })
+    const authFetch = async () => {
+        const token = getCookie('profile')
+        const data1 = await userData(token as string)
+        currentProfile.setState({ ...currentProfile.state, ...data1 })
+    }
 
     useEffect(() => {
-        if (data) {
-            currentProfile.setState({ ...currentProfile.state, ...data })
-        }
-    }, [data])
+        authFetch()
+    }, [])
 
     useEffect(() => {
         if (currentProfile.state.id) {
@@ -47,9 +45,9 @@ const Client_Provider: FC<Client_ProviderProps> = ({
         }
     }, [socket, searchParam, currentProfile.state.id])
 
-    if (error) {
-        <div>User Fetch error</div>
-    }
+    // if (error) {
+    //     <div>User Fetch error</div>
+    // }
 
     return (
         <>

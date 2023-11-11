@@ -17,14 +17,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import useClientProfile from "@/hooks/client-profile";
+import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation"
 
 export function UserNav() {
   const router = useRouter()
-  // const { user, error: UserError, isLoading } = useUser();
   const currentProfile = useClientProfile()
 
   const user = currentProfile.state
+
+  const Logout = () => {
+    deleteCookie("profile")
+    currentProfile.logout()
+    router.replace("/auth")
+  }
 
   return (
     <DropdownMenu>
@@ -62,10 +68,7 @@ export function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {
-          userLogout()
-          router.replace("/auth")
-        }}>
+        <DropdownMenuItem onClick={Logout}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

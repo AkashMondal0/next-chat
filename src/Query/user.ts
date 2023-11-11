@@ -41,11 +41,11 @@ const userLogout = async () => {
 }
 
 const userData = async (SignInToken: string) => {
-    if (token || SignInToken) {
+    if (SignInToken) {
         const url = qs.stringifyUrl({
             url: "/api/authentication/authorize",
             query: {
-                token: token || SignInToken
+                token: SignInToken
             }
         });
         const res = await axios.get(url)

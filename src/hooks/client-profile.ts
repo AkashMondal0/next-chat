@@ -1,7 +1,20 @@
 import { Conversation, Group, MessageDirect, User } from '@/interface/type'
 import { create } from 'zustand'
 
-
+const _state = {
+    id: '',
+    cloudMessageId: '',
+    name: '',
+    imageUrl: '',
+    email: '',
+    phone: '',
+    status: '',
+    notification: [],
+    conversations: [],
+    groups: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+}
 type ProfileState = {
     state: User
     loginToken: string
@@ -13,25 +26,11 @@ type ProfileState = {
     setGroups: (data: Group[]) => void
     updateConversation: (data: MessageDirect) => void
     conversationMessageSeen: (conversationId: string, data: string[]) => void
+    logout: () => void
 }
 
 const useClientProfile = create<ProfileState>((set) => ({
-    state: {
-        id: '',
-        cloudMessageId: '',
-        name: '',
-        imageUrl: '',
-        email: '',
-        phone: '',
-        status: '',
-        notification: [],
-        conversations: [],
-        groups: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        SeenBy: [],
-        GroupSeenBy: []
-    },
+    state: _state,
     loginToken: '',
     conversations: [],
     groups: [],
@@ -75,6 +74,12 @@ const useClientProfile = create<ProfileState>((set) => ({
             return conversation
         })
         return { conversations: updatedConversations }
+    }),
+    logout: () => set({
+        state: _state,
+        loginToken: '',
+        conversations: [],
+        groups: [],
     })
     // update message in conversation
 
