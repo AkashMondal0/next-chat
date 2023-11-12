@@ -20,7 +20,7 @@ export async function PATCH(req: NextRequest) {
         })
 
         const groupMembers = users.map((userId: string) => {
-            return { role: "MEMBER", userId: userId, id: authorId }
+            return { role: "MEMBER", userId: userId}
         })
 
         const createConversation = await db.group.update({

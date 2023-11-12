@@ -23,10 +23,10 @@ model Notification {
   @@index([userId])
 }
 
-model UserHistory {
-  id          String @id @default(uuid())
-  searchUsers User[]
-}
+// model UserHistory {
+//   id          String @id @default(uuid())
+//   searchUsers User[] 
+// }
 
 // chat app schemas
 model User {
@@ -39,7 +39,7 @@ model User {
   phone          String        @db.Text
   status         String        @db.Text
   cloudMessageId String        @db.Text
-  userHistory    UserHistory  @relation(fields: [userId], references: [id])
+  // userHistory    UserHistory  @relation(fields: [id], references: [id])
 
   notification  Notification[]
   conversations Conversation[]
@@ -49,6 +49,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@index([id])
 }
 
 model Conversation {

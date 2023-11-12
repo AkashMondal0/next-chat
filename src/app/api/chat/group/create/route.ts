@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
         }).concat({ id: authorId })
 
         const groupMembers = users.map((userId: string) => {
-            return { role: "MEMBER", userId: userId, id: userId }
-        }).concat({ role: "ADMIN", userId: authorId, id: authorId })
+            return { role: "MEMBER", userId: userId}
+        }).concat({ role: "ADMIN", userId: authorId})
 
 
         if (!authorId) {
