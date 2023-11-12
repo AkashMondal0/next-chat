@@ -15,6 +15,11 @@ export type Notification = {
     createdAt: Date;
     updatedAt: Date;
   }
+
+  export type UserHistory = {
+    id: string;
+    searchUsers: User[];
+  }
   
   export type User = {
     id: string;
@@ -26,6 +31,7 @@ export type Notification = {
     cloudMessageId: string;
     notification: Notification[];
     conversations: Conversation[];
+    userHistory: UserHistory[];
     groups: Group[];
     createdAt: Date;
     updatedAt: Date;

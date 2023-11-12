@@ -12,6 +12,7 @@ const _state = {
     notification: [],
     conversations: [],
     groups: [],
+    userHistory: [],
     createdAt: new Date(),
     updatedAt: new Date(),
 }

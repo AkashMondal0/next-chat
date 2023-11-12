@@ -26,7 +26,6 @@ const SearchModal: FC<SearchModalProps> = () => {
 
   useEffect(() => {
     if(!mutation.data){
-      // console.log("start")
       mutation.mutate()
     }
   }, [])

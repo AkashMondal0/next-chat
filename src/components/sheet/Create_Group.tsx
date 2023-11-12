@@ -1,4 +1,5 @@
 "use client"
+import { ComboboxForm } from "../shared/Cammand-box"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
@@ -26,11 +27,12 @@ const SheetCreateGroup = () => {
                             </Label>
                             <Input id="name" value="Pedro Duarte" className="col-span-3" />
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="username" className="text-right">
+                        <div className="grid grid-cols-4 items-center gap-4 mx-auto">
+                            {/* <ComboboxForm/> */}
+                            {/* <Label htmlFor="username" className="text-right">
                                 Username
                             </Label>
-                            <Input id="username" value="@peduarte" className="col-span-3" />
+                            <Input id="username" value="@peduarte" className="col-span-3" /> */}
                         </div>
                     </div>
                     <SheetFooter>
