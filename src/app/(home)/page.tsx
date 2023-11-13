@@ -5,9 +5,9 @@ import { useSearchParams } from "next/navigation";
 import useClientProfile from "@/hooks/client-profile";
 import Sidebar from "@/app/(home)/components/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Header from "./components/header";
-import ChatBody from "./components/body";
-import ChatFooter from "./components/footer";
+import Header from "./components/chat-inbox/header";
+import ChatBody from "./components/chat-inbox/body";
+import ChatFooter from "./components/chat-inbox/footer";
 import Client_Provider from "@/components/provider/Client_Provider";
 
 

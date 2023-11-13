@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
     try {
         const { users, name } = await req.json()
         const authorId = new URL(req.url).searchParams.get("authorId");
-
+        // console.log(users, name, authorId)
         const groupUsers = users.map((userId: string) => {
             return { id: userId }
         }).concat({ id: authorId })
