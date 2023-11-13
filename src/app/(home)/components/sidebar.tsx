@@ -20,6 +20,7 @@ import { getUserConversation } from '@/api-functions/direct-chat';
 import GroupCreateModal from '@/components/modal/GroupCreate';
 import UserCard from './private-chat/User-Card';
 import { getGroupConversation } from '@/api-functions/group-chat';
+import GroupCard from './Group-chat/Card-Group';
 
 export default function Sidebar() {
     const currentProfile = useClientProfile()
@@ -67,7 +68,7 @@ export default function Sidebar() {
             socket.off('user_chat_list')
             socket.off('user_group_list')
         }
-    }, [data, socket, GroupConversationList.data])
+    }, [data, GroupConversationList.data])
 
     // console.log(GroupConversationList.data)
     return (
@@ -100,7 +101,7 @@ export default function Sidebar() {
 
                             <>
                                 {currentProfile.groups.map((item, i) => {
-                                    return <>{item.name}</>
+                                    return <GroupCard item={item} key={item.id} />
                                 })}
                             </>
                         </div>

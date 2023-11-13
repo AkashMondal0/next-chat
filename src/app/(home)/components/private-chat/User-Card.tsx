@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import useScrollToTop from '@/hooks/scrollToBottom';
@@ -14,7 +15,7 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     const router = useRouter()
     const [isTyping, setIsTyping] = useState(false)
     const currentProfile = useClientProfile()
-    const searchParam = useSearchParams().get("id")
+    const searchParam = useSearchParams().get("private_id")
     const Scroll = useScrollToTop()
 
 
@@ -40,7 +41,7 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
             mutation.mutate(seenCount().map((item) => item.id) as string[])
         }
         if (searchParam !== item.id) {
-            router.replace(`?id=${ChatId}`)
+            router.replace(`?private_id=${ChatId}`)
         }
     }
 
@@ -55,11 +56,15 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
                 currentProfile.conversationMessageSeen(item.id, seen_data.data)
             }
         })
-    }, [socket])
+        return () => {
+            socket.off('_typing')
+            socket.off('message_for_user_seen')
+        }
+    }, [])
 
     useEffect(() => {
         if (searchParam === item.id) {
-            ChatPage(searchParam)
+            ChatPage(searchParam) //TODO-issue here Scroll
         }
     }, [searchParam, Scroll])
 

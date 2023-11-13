@@ -96,11 +96,12 @@ model Group {
   id              String    @id @default(uuid())
   name            String    @db.Text
   Members         Member[]
+  imageUrl        String?    @db.Text
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   lastMessage     String    @db.Text
   lastMessageTime DateTime  @default(now())
-  messages        Message[]
+  messages        GroupMessage[]
   authorId        String?
   users           User[]
   messageCount    Int       @default(0)
@@ -131,7 +132,7 @@ model GroupSeenBy {
   id              String   @id @default(uuid())
   userId          String
   messageId       String
-  message         Message  @relation(fields: [messageId], references: [id])
+  message         GroupMessage  @relation(fields: [messageId], references: [id])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   messageDirectId String?
@@ -139,7 +140,7 @@ model GroupSeenBy {
   @@index([messageId])
 }
 
-model Message {
+model GroupMessage {
   id       String        @id @default(uuid())
   content  String        @db.Text
   fileUrl  String?       @db.Text

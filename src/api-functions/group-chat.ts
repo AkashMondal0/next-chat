@@ -30,8 +30,16 @@ const createGroupConversation = async (data:CreateGroupConversationData) => {
     return res
 }
 
+const sendGroupMessage = async (data: any) => {
+  const url = qs.stringifyUrl({
+    url: "/api/chat/group/message/send",
+  });
+  let res = await axios.post(url, data)
+  return res
+}
 
 export {
     createGroupConversation,
-    getGroupConversation
+    getGroupConversation,
+    sendGroupMessage
 }

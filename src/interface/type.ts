@@ -72,12 +72,14 @@ export type Notification = {
   export type Group = {
     id: string;
     name: string;
+    imageUrl: string;
     Members: Member[];
+    users: User[];
     createdAt: Date;
     updatedAt: Date;
     lastMessage: string;
     lastMessageTime: Date;
-    messages: Message[];
+    messages: GroupMessage[];
     author?: User;
     authorId?: string;
   }
@@ -102,7 +104,7 @@ export type Notification = {
     id: string;
     userId: string;
     messageId: string;
-    message: Message;
+    message: GroupMessage;
     createdAt: Date;
     updatedAt: Date;
     MessageDirect?: MessageDirect;
@@ -110,21 +112,22 @@ export type Notification = {
     User: User;
   }
   
-  export type Message = {
-    id: string;
+  export type GroupMessage = {
+    id?: string;
     content: string;
     fileUrl?: string;
     memberId: string;
     groupId: string;
-    group: Group;
-    deleted: boolean;
-    seenBy: GroupSeenBy[];
-    createdAt: Date;
-    updatedAt: Date;
+    group?: Group;
+    deleted?: boolean;
+    seenBy?: GroupSeenBy[];
+    createdAt?: Date;
+    updatedAt?: Date;
   }
 
   export type typingState = {
     conversationId?: string,
+    groupId?: string,
     senderId?: string,
     receiverId?: string,
     typing: boolean

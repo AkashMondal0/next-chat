@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import useScrollToTop from '@/hooks/scrollToBottom';
-import { Conversation, MessageDirect, User, typingState } from '@/interface/type';
+import { Conversation, Group, MessageDirect, User, typingState } from '@/interface/type';
 import { useEffect, useState } from 'react';
 import useClientProfile from '@/hooks/client-profile';
 import socket from '@/lib/socket';
@@ -10,20 +10,24 @@ import { useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
+const TimeFormat = (date:Date)=>{
+    return new Date(date).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+}
 
-const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
+interface GroupCardProps {
+    item: Group
+}
+
+const GroupCard : React.FC<GroupCardProps> = ({ item }) => {
     const router = useRouter()
     const [isTyping, setIsTyping] = useState(false)
     const currentProfile = useClientProfile()
     const searchParam = useSearchParams().get("id")
     const Scroll = useScrollToTop()
 
-    const ChatPage = (ChatId: string) => {
-        // if (seenCount().length > 0) {
-        //     mutation.mutate(seenCount().map((item) => item.id) as string[])
-        // }
+    const ChatPage = (RoomId: string) => {
         if (searchParam !== item.id) {
-            router.replace(`?id=${ChatId}`)
+            router.replace(`?group_id=${RoomId}`)
         }
     }
 
@@ -39,11 +43,11 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
         key={item.id}>
         <div className={`flex w-full items-center`}>
             <Avatar className="h-12 w-12">
-                <AvatarImage src={data.imageUrl} alt="Avatar" />
-                <AvatarFallback>{data.name[0]}</AvatarFallback>
+                <AvatarImage src={item.imageUrl} alt="Avatar" />
+                <AvatarFallback>{item.name[0]}</AvatarFallback>
             </Avatar>
             <div className="ml-4 space-y-1">
-                <p className="text-sm font-medium leading-none text-start">{data.name}</p>
+                <p className="text-sm font-medium leading-none text-start">{item.name}</p>
                 <p className="text-sm text-muted-foreground text-start">
                     {isTyping ? "typing" : item.lastMessage}
                 </p>
@@ -51,7 +55,7 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
         </div>
         <div className='w-20'>
             <div className="ml-auto font-medium">
-                {new Date(item.updatedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                {TimeFormat(item.updatedAt)}
             </div>
             {/* {searchParam !== item.id && seenCount().length > 0 ?
                 <div className='rounded-full bg-black dark:bg-white mx-auto my-1
@@ -63,4 +67,4 @@ const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
     </Button>
 }
 
-export default UserCard;
+export default GroupCard;

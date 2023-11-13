@@ -43,7 +43,7 @@ const Client_Provider: FC<Client_ProviderProps> = ({
         return () => {
             socket.off('message_for_user')
         }
-    }, [socket, searchParam, currentProfile.state.id])
+    }, [searchParam, currentProfile.state.id])
 
     // if (error) {
     //     <div>User Fetch error</div>

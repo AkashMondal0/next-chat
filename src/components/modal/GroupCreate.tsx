@@ -87,7 +87,7 @@ const GroupCreateModal: FC<GroupCreateModalProps> = () => {
       status={mutation.isPending}
       error={mutation.error} />
     {mutationCreateGroup.isSuccess ?
-      <DialogClose onClick={createGroupHandler}>
+      <DialogClose>
         <Button className="w-full" variant={'outline'}>
           Done
         </Button>
