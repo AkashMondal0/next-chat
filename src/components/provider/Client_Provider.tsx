@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import { userData } from '@/Query/user';
+import { userData } from '@/api-functions/user';
 import useClientProfile from '@/hooks/client-profile';
 import useScrollToTop from '@/hooks/scrollToBottom';
 import { MessageDirect, User } from '@/interface/type';

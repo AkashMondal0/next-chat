@@ -1,5 +1,4 @@
 'use client'
-import { userLogout } from "@/Query/user";
 import {
   Avatar,
   AvatarFallback,

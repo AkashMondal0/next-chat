@@ -1,19 +1,8 @@
 import qs from 'query-string';
 import axios from "axios"
-import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+import { deleteCookie, setCookie } from 'cookies-next';
 import { login_credential, register_credential } from '@/interface/type';
-const token = getCookie('profile')
 
-const getUserConversation = async (userId: string) => {
-    const url = qs.stringifyUrl({
-        url: "/api/chat/direct/list",
-        query: {
-            userId: userId
-        }
-    });
-    const res = await axios.get(url)
-    return res.data
-}
 
 const getSearchUser = async () => {
     const res = await axios.post('/api/users');
@@ -56,7 +45,6 @@ const userData = async (SignInToken: string) => {
 }
 
 export {
-    getUserConversation,
     getSearchUser,
     userLogin,
     userRegister,

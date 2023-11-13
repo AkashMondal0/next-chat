@@ -6,14 +6,17 @@ import { User } from '@/interface/type';
 import useClientProfile from '@/hooks/client-profile';
 import { UserPlus2, Users } from 'lucide-react';
 import { Button } from '../ui/button';
-import { getSearchUser } from '@/Query/user';
+import { getSearchUser } from '@/api-functions/user';
 import Group_Create_Command from '../shared/Group-Create-Command';
 import { DialogClose } from '../ui/dialog';
 
 interface GroupCreateModalProps { }
 
 const GroupCreateModal: FC<GroupCreateModalProps> = () => {
+  const currentProfile = useClientProfile()
   const mutation = useMutation({ mutationFn: getSearchUser })
+  const mutationCreateGroup = useMutation({ mutationFn: getSearchUser })
+
   const [addUserToGroup, setAddUserToGroup] = useState<User["id"][]>([])
 
   useEffect(() => {
@@ -21,6 +24,10 @@ const GroupCreateModal: FC<GroupCreateModalProps> = () => {
       mutation.mutate()
     }
   }, [])
+
+  const filterUser = (users: User[]) => {
+    return users.filter(user => user.id !== currentProfile.state.id)
+  }
 
   const addUserToGroupHandler = (id: User["id"]) => {
     setAddUserToGroup([...addUserToGroup, id])
@@ -41,12 +48,12 @@ const GroupCreateModal: FC<GroupCreateModalProps> = () => {
       addUserToGroupHandler={addUserToGroupHandler}
       removeUserFromGroupHandler={removeUserFromGroupHandler}
       addUserToGroup={addUserToGroup}
-      data={mutation.data ? mutation.data : []}
+      data={filterUser(mutation.data ? mutation.data : [])}
       status={mutation.isPending}
       error={mutation.error} />
-      <Button className="w-full" onClick={createGroupHandler}>
-        Create Group
-      </Button>
+    <Button className="w-full" onClick={createGroupHandler}>
+      Create Group
+    </Button>
     {/* <DialogClose onClick={createGroupHandler}>
     </DialogClose> */}
   </Modal>)

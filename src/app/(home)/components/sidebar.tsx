@@ -24,7 +24,7 @@ import socket from '@/lib/socket';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import useScrollToTop from '@/hooks/scrollToBottom';
-import { getUserConversation } from '@/Query/user';
+import { getUserConversation } from '@/api-functions/direct-chat';
 import GroupCreateModal from '@/components/modal/GroupCreate';
 
 export default function Sidebar() {

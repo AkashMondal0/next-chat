@@ -7,7 +7,7 @@ import { User } from '@/interface/type';
 import useClientProfile from '@/hooks/client-profile';
 import { Users } from 'lucide-react';
 import { Button } from '../ui/button';
-import { getSearchUser } from '@/Query/user';
+import { getSearchUser } from '@/api-functions/user';
 
 interface SearchModalProps { }
 

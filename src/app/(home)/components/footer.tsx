@@ -3,11 +3,10 @@ import { Button } from '@/components/ui/button';
 import useClientProfile from '@/hooks/client-profile';
 import { Conversation, MessageDirect, typingState } from '@/interface/type';
 import { cn } from '@/lib/utils';
-import axios from "axios"
-import qs from "query-string"
 import { useMutation, useQuery } from '@tanstack/react-query'
 import socket from '@/lib/socket';
 import { Send } from 'lucide-react';
+import { sendMessage } from '@/api-functions/direct-chat';
 // import { pushNotification } from '@/Query/user';
 interface ChatFooterProps {
     data: Conversation | undefined
@@ -24,17 +23,11 @@ const ChatFooter: FC<ChatFooterProps> = ({
             content: inputValue,
             memberId: currentProfile.state.id,
             fileUrl: '',
-            conversationId: data?.id || ""
+            conversationId: data?.id as string,
         }
         setInputValue("")
-        const url = qs.stringifyUrl({
-            url: "/api/chat/direct/message/send",
-            query: {
-                receiverId: userData?.id,
-            }
-        });
-        let res = await axios.post(url, newMessage)
-        
+        let res = await sendMessage(newMessage, userData?.id as string)
+        return res
         // send notification
         // const dataPush = {
         //     registrationToken: currentProfile.state.cloudMessageId,
@@ -43,11 +36,9 @@ const ChatFooter: FC<ChatFooterProps> = ({
         //     imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Olivia_Rodrigo_with_Dr_Fauci_1.png/640px-Olivia_Rodrigo_with_Dr_Fauci_1.png"
         // }
         // pushNotification(dataPush)
-        return res
     }
 
     const isTyping = () => {
-
         const message: typingState = {
             conversationId: data?.id,
             senderId: currentProfile.state.id,

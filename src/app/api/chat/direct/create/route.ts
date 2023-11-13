@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
 
 
-    const { id: receiverId } = await req.json()
+    const { receiverId } = await req.json()
     const senderId = new URL(req.url).searchParams.get("senderId")
 
 
