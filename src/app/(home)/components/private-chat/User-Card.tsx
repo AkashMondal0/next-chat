@@ -11,12 +11,13 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
-const UserCard = ({ data, item }: { data: User, item: Conversation }) => {
+const UserCard = ({ item }: { item: Conversation }) => {
     const router = useRouter()
     const [isTyping, setIsTyping] = useState(false)
     const currentProfile = useClientProfile()
     const searchParam = useSearchParams().get("private_id")
     const Scroll = useScrollToTop()
+    let data: User = item.users.find(uid => uid.id !== currentProfile.state.id) as User
 
 
     const seenCount = () => {

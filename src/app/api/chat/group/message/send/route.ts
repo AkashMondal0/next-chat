@@ -41,13 +41,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Message not found" }, { status: 404 });
         }
 
-        // const messageSocket = {
-        //     senderId: newMessage.memberId,
-        //     // receiverId: receiverId,
-        //     data: messageData,
-        // }
+        const messageSocket = {
+            id: newMessage.groupId,
+            data: messageData,
+        }
 
-        // socket.emit("message_for_user", messageSocket)
+        socket.emit("group_message_for_user", messageSocket)
         return NextResponse.json(messageData, { status: 200 });
     } catch (error) {
         console.log(error)

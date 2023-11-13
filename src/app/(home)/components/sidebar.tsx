@@ -47,8 +47,16 @@ export default function Sidebar() {
         enabled: currentProfile.state.id ? true : false,
     });
 
-    const ArrangeDateByeDate = (data: Conversation[]) => {
-        return data?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+    const ArrangeDateByeDate = (data: Conversation[], data2: Group[]) => {
+        let privateConversationList = data.map(item => {
+            return { ...item, type: 'DIRECT' }
+        })
+        let groupConversationList = data2.map(item => {
+            return { ...item, type: 'GROUP' }
+        })
+
+        return [...privateConversationList, ...groupConversationList]
+            .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     }
 
     useEffect(() => {
@@ -91,18 +99,13 @@ export default function Sidebar() {
                                 {Array.from({ length: 10 }).map((_, i) => <UserCardLoading key={i} />)}
                             </div>}
                             <>
-                                {ArrangeDateByeDate(data ? currentProfile.conversations : [])?.map((item, i) => {
-                                    const otherUser = item.users.find(uid => uid.id !== currentProfile.state.id)
-                                    return <>{otherUser?.id ?
-                                        <UserCard data={otherUser} key={item.id} item={item} />
-                                        : <UserCardLoading key={i} />}</>
-                                })}
-                            </>
-
-                            <>
-                                {currentProfile.groups.map((item, i) => {
-                                    return <GroupCard item={item} key={item.id} />
-                                })}
+                                {ArrangeDateByeDate(data ? currentProfile.conversations : [], currentProfile.groups)
+                                    ?.map((item: any | Conversation | Group, i) => {
+                                        return <>{item.type === "DIRECT" ?
+                                            <UserCard key={item.id} item={item} /> :
+                                             <GroupCard item={item} key={item.id} />
+                                        }</>
+                                    })}
                             </>
                         </div>
                     </CardContent>

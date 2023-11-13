@@ -45,6 +45,7 @@ export type Notification = {
     lastMessage: string;
     lastMessageTime: Date;
     messages: MessageDirect[];
+    type:"DIRECT" | "GROUP";
   }
   
   export type SeenBy = {
@@ -82,6 +83,7 @@ export type Notification = {
     messages: GroupMessage[];
     author?: User;
     authorId?: string;
+    type:"DIRECT" | "GROUP";
   }
   
   enum MemberRole {

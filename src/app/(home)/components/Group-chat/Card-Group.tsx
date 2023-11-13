@@ -1,16 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter, useSearchParams } from 'next/navigation';
-import axios from 'axios';
 import useScrollToTop from '@/hooks/scrollToBottom';
-import { Conversation, Group, MessageDirect, User, typingState } from '@/interface/type';
+import { Group, GroupMessage } from '@/interface/type';
 import { useEffect, useState } from 'react';
 import useClientProfile from '@/hooks/client-profile';
 import socket from '@/lib/socket';
-import { useMutation } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const TimeFormat = (date:Date)=>{
+const TimeFormat = (date: Date) => {
     return new Date(date).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 }
 
@@ -18,12 +16,12 @@ interface GroupCardProps {
     item: Group
 }
 
-const GroupCard : React.FC<GroupCardProps> = ({ item }) => {
+const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
     const router = useRouter()
     const [isTyping, setIsTyping] = useState(false)
     const currentProfile = useClientProfile()
-    const searchParam = useSearchParams().get("id")
-    const Scroll = useScrollToTop()
+    const searchParam = useSearchParams().get("group_id")
+    const scrollIntoView = useScrollToTop()
 
     const ChatPage = (RoomId: string) => {
         if (searchParam !== item.id) {
@@ -32,10 +30,25 @@ const GroupCard : React.FC<GroupCardProps> = ({ item }) => {
     }
 
     useEffect(() => {
-        if (searchParam === item.id) {
-            ChatPage(searchParam)
+        socket.emit('user_connect_group', {
+            id: item.id
+        })
+        socket.on('group_message_for_user', (data: GroupMessage) => {
+            currentProfile.updateGroupMessages(data)
+            if (data.groupId === searchParam) {
+                scrollIntoView.setState()
+            }
+        })
+        return () => {
+            socket.off('group_message_for_user')
         }
-    }, [searchParam, Scroll])
+    }, [])
+
+    // useEffect(() => {
+    //     if (searchParam === item.id) {
+    //         ChatPage(searchParam)
+    //     }
+    // }, [searchParam, scrollIntoView])
 
     return <Button onClick={() => ChatPage(item.id)}
         variant={"ghost"}

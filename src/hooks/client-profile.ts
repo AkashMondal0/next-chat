@@ -1,4 +1,4 @@
-import { Conversation, Group, MessageDirect, User } from '@/interface/type'
+import { Conversation, Group, GroupMessage, MessageDirect, User } from '@/interface/type'
 import { create } from 'zustand'
 
 const _state = {
@@ -27,6 +27,7 @@ type ProfileState = {
     setGroups: (data: Group[]) => void
     updateConversation: (data: MessageDirect) => void
     conversationMessageSeen: (conversationId: string, data: string[]) => void
+    updateGroupMessages: (data: GroupMessage) => void
     logout: () => void
 }
 
@@ -81,8 +82,20 @@ const useClientProfile = create<ProfileState>((set) => ({
         loginToken: '',
         conversations: [],
         groups: [],
-    })
+    }),
     // update message in conversation
-
+    updateGroupMessages: (data: GroupMessage) => set((pre) => {
+        const updated_group = pre.groups.map((group) => {
+            if (group.id === data.groupId) {
+                if (!group.messages.find((message) => (message.id === data.id))) {
+                    group.messages.push(data)
+                    group.lastMessage = data.content
+                    group.updatedAt = new Date()
+                }
+            }
+            return group
+        })
+        return { groups: updated_group }
+    }),
 }))
 export default useClientProfile
