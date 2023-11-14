@@ -43,7 +43,7 @@ const GroupBody: FC<GroupBodyProps> = ({
                 {data?.messages?.map((message) => {
                     const member = data?.users?.find((user) => user.id === message.memberId)
                     return <GroupMessagesCard
-                    seen={message.deleted as boolean}
+                    seen={message.seenBy?.length === data?.users?.length}
                     profile={currentProfile.state.id === message.memberId}
                     data={message}
                     member={member}
