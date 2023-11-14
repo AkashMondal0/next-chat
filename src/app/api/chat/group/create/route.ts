@@ -40,8 +40,7 @@ export async function POST(req: NextRequest) {
         });
 
         for (let index = 0; index < groupUsers.length; index++) {
-            socket.emit("user_chat_list", {
-                receiverId: groupUsers[index].id,
+            socket.emit("group_chat_list", {
                 senderId: groupUsers[index].id,
                 data: createConversation
             })

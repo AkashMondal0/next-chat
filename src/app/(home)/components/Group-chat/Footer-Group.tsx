@@ -35,20 +35,18 @@ const GroupFooter: FC<GroupFooterProps> = ({
         const message: typingState = {
             groupId: data?.id,
             senderId: currentProfile.state.id,
-            // receiverId: userData?.id,
             typing: true
         }
-        socket.emit('_typing', message)
+        socket.emit('group_typing', message)
     }
 
     const stopTyping = () => {
         const message: typingState = {
             groupId: data?.id,
             senderId: currentProfile.state.id,
-            // receiverId: userData?.id,
             typing: false
         }
-        socket.emit('_typing', message)
+        socket.emit('group_typing', message)
     }
 
     const mutation = useMutation({ mutationFn: postMessage })

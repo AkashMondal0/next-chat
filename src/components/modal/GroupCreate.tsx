@@ -47,7 +47,6 @@ const GroupCreateModal: FC<GroupCreateModalProps> = () => {
         title: `Group ${groupName} created`,
         description: new Date().toLocaleTimeString(),
       })
-      setGroupName("")
       setAddUserToGroup([])
     } if (mutationCreateGroup.isError) {
       toast({
@@ -72,30 +71,40 @@ const GroupCreateModal: FC<GroupCreateModalProps> = () => {
   return (<Modal title={"Create Group"} trigger={<Button variant={"ghost"}>
     <UserPlus2 className='w-6 h-6 cursor-pointer' />
   </Button>}>
-    <Input
-      value={groupName}
-      onChange={(e) => setGroupName(e.target.value)}
-      type="text" placeholder="Group Name" />
-    {
-      mutationCreateGroup.isError && <p className="text-red-500 text-sm">Error: {mutationCreateGroup.error?.message}</p>
-    }
-    <Group_Create_Command
-      addUserToGroupHandler={addUserToGroupHandler}
-      removeUserFromGroupHandler={removeUserFromGroupHandler}
-      addUserToGroup={addUserToGroup}
-      data={filterUser(mutation.data ? mutation.data : [])}
-      status={mutation.isPending}
-      error={mutation.error} />
     {mutationCreateGroup.isSuccess ?
-      <DialogClose>
-        <Button className="w-full" variant={'outline'}>
-          Done
-        </Button>
-      </DialogClose>
+      <>
+        <div className="flex items-center justify-center">
+          <Users className='w-12 h-12' />
+        </div>
+        <div className="text-center text-2xl font-semibold">
+          {`Your ${groupName} Group Created Successfully`}
+        </div>
+        <DialogClose onClick={() => {
+          setGroupName("")
+          mutationCreateGroup.reset()
+        }}>
+          <Button className="w-full" variant={'outline'}>
+            Done
+          </Button>
+        </DialogClose>
+      </>
       :
-      <Button className="w-full" onClick={createGroupHandler} disabled={mutationCreateGroup.isPending}>
-        {mutationCreateGroup.isPending ? <Loader2 className='animate-spin text-zinc-500 w-8 h-8' /> : "Create Group"}
-      </Button>}
+      <>
+        <Input
+          value={groupName}
+          onChange={(e) => setGroupName(e.target.value)}
+          type="text" placeholder="Group Name" />
+        <Group_Create_Command
+          addUserToGroupHandler={addUserToGroupHandler}
+          removeUserFromGroupHandler={removeUserFromGroupHandler}
+          addUserToGroup={addUserToGroup}
+          data={filterUser(mutation.data ? mutation.data : [])}
+          status={mutation.isPending}
+          error={mutation.error} />
+        <Button className="w-full" onClick={createGroupHandler} disabled={mutationCreateGroup.isPending}>
+          {mutationCreateGroup.isPending ? <Loader2 className='animate-spin text-zinc-500 w-8 h-8' /> : "Create Group"}
+        </Button>
+      </>}
   </Modal>)
 };
 

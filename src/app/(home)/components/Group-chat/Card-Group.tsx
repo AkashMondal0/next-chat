@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter, useSearchParams } from 'next/navigation';
 import useScrollToTop from '@/hooks/scrollToBottom';
-import { Group, GroupMessage } from '@/interface/type';
+import { Group, GroupMessage, typingState } from '@/interface/type';
 import { useEffect, useState } from 'react';
 import useClientProfile from '@/hooks/client-profile';
 import socket from '@/lib/socket';
@@ -21,11 +21,15 @@ interface GroupCardProps {
 
 const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
     const router = useRouter()
-    const [isTyping, setIsTyping] = useState(false)
+    const [isTyping, setIsTyping] = useState({ typing: false, senderId: "" })
     const currentProfile = useClientProfile()
     const searchParam = useSearchParams().get("group_id")
     const scrollIntoView = useScrollToTop()
-    
+
+    const findGroupUserName = (id:string) => {
+       return item.users.find((item) => item.id === id)?.name
+    }
+
     const seenCount = () => {
         return item.messages
             .filter((item) => item.seenBy
@@ -69,6 +73,15 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
                 currentProfile.groupMessageSeen(seen_data)
             }
         })
+        socket.on('group_typing', (data_typing: typingState) => {
+            if (data_typing.senderId !== currentProfile.state.id && data_typing.groupId === item.id) {
+                // console.log("data_typing", data_typing)
+                setIsTyping({
+                    typing: data_typing.typing,
+                    senderId: data_typing.senderId as string
+                })
+            }
+        })
         return () => {
             socket.off('group_message_for_user')
             socket.off('group_message_for_user_seen')
@@ -94,7 +107,7 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
             <div className="ml-4 space-y-1">
                 <p className="text-sm font-medium leading-none text-start">{item.name}</p>
                 <p className="text-sm text-muted-foreground text-start">
-                    {isTyping ? "typing" : item.lastMessage}
+                    {isTyping.typing ? `${findGroupUserName(isTyping.senderId)} is typing` : item.lastMessage}
                 </p>
             </div>
         </div>

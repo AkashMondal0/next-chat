@@ -67,12 +67,14 @@ export default function Sidebar() {
             currentProfile.setGroups(GroupConversationList.data as Group[])
         }
         socket.on('user_chat_list', () => {
-            GroupConversationList.refetch()
             refetch()
+        })
+        socket.on('group_chat_list', () => {
+            GroupConversationList.refetch()
         })
         return () => {
             socket.off('user_chat_list')
-            socket.off('user_group_list')
+            socket.off('group_chat_list')
         }
     }, [data, GroupConversationList.data])
 
