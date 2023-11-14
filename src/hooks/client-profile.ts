@@ -1,3 +1,4 @@
+import { GroupMessageSeenSocket } from '@/app/api/chat/group/message/seen/route'
 import { Conversation, Group, GroupMessage, MessageDirect, User } from '@/interface/type'
 import { create } from 'zustand'
 
@@ -28,6 +29,7 @@ type ProfileState = {
     updateConversation: (data: MessageDirect) => void
     conversationMessageSeen: (conversationId: string, data: string[]) => void
     updateGroupMessages: (data: GroupMessage) => void
+    groupMessageSeen: (data: GroupMessageSeenSocket) => void
     logout: () => void
 }
 
@@ -96,6 +98,22 @@ const useClientProfile = create<ProfileState>((set) => ({
             return group
         })
         return { groups: updated_group }
+    }),
+    groupMessageSeen: (data: GroupMessageSeenSocket) => set((pre) => {
+        const updatedConversations = pre.groups.map((group) => {
+            if (group.id === data.groupId) {
+                group.messages.map((message) => {
+                    if (data.messageIds.find((id) => (id === message.id))) {
+                        if(!message.seenBy?.includes({ userId: data.seenUserId })){
+                            message.seenBy?.push({ userId: data.seenUserId })
+                        }
+                    }
+                    return message
+                })
+            }
+            return group
+        })
+        return { groups: updatedConversations }
     }),
 }))
 export default useClientProfile

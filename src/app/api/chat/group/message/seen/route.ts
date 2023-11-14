@@ -2,26 +2,43 @@ import db from "@/lib/db";
 import socket from "@/lib/socket";
 import { NextRequest, NextResponse } from "next/server";
 
+export type GroupMessageSeenSocket = {
+    groupId: string,
+    seenUserId: string,
+    messageIds: string[],
+}
+
 export async function POST(req: NextRequest) {
 
-    const { senderId, receiverId, data } = await req.json()
-    const messageData = await db.messageDirect.updateMany({
-        where: {
-            id: {
-                in: data
-            }
-        },
-        data: {
-            deleted: true,
-            seen: true,
-        },
-    });
+    const { groupId, seenUserId, messageIds } = await req.json() as GroupMessageSeenSocket
 
-    const messageSeenSocket = {
-        senderId,
-        receiverId,
-        data,
-    }
+    // console.log("groupId", groupId)
+    // console.log("seenUserId", seenUserId)
+    // console.log(messageIds)
 
-    return NextResponse.json(messageSeenSocket, { status: 200 });
+    // for (let index = 0; index < messageIds.length; index++) {
+    //     await db.groupMessage.update({
+    //         where: {
+    //             id: messageIds[index]
+    //         },
+    //         data: {
+    //             seenBy: {
+    //                 create: {
+    //                     userId: seenUserId,
+    //                 }
+    //             }
+    //         },
+    //     });
+    // }
+
+
+    // const messageSeenSocket: GroupMessageSeenSocket = {
+    //     groupId,
+    //     seenUserId,
+    //     messageIds,
+    // }
+
+    // socket.emit("group_message_for_user_seen", messageSeenSocket);
+
+    return NextResponse.json("done", { status: 200 });
 }

@@ -103,15 +103,15 @@ export type Notification = {
   }
   
   export type GroupSeenBy = {
-    id: string;
+    id?: string;
     userId: string;
-    messageId: string;
-    message: GroupMessage;
-    createdAt: Date;
-    updatedAt: Date;
+    messageId?: string;
+    message?: GroupMessage;
+    createdAt?: Date;
+    updatedAt?: Date;
     MessageDirect?: MessageDirect;
     messageDirectId?: string;
-    User: User;
+    User?: User;
   }
   
   export type GroupMessage = {

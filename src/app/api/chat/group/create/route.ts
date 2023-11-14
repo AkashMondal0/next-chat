@@ -1,4 +1,5 @@
 import db from "@/lib/db";
+import socket from "@/lib/socket";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -37,6 +38,14 @@ export async function POST(req: NextRequest) {
                 users: true,
             },
         });
+
+        for (let index = 0; index < groupUsers.length; index++) {
+            socket.emit("user_chat_list", {
+                receiverId: groupUsers[index].id,
+                senderId: groupUsers[index].id,
+                data: createConversation
+            })
+        }
         return NextResponse.json(createConversation, { status: 200 });
     } catch (error) {
         console.log(error)

@@ -28,7 +28,7 @@ const UserCard = ({ item }: { item: Conversation }) => {
         const messageSeen = {
             senderId: currentProfile.state.id,
             receiverId: data.id,
-            data: ids,
+            data: ids, // messages id
         }
         let res = await axios.post("/api/chat/direct/message/seen", messageSeen)
         socket.emit("message_for_user_seen", messageSeen)
