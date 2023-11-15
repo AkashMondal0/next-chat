@@ -76,10 +76,10 @@ const UserCard = ({ item }: { item: Conversation }) => {
         <div className={`flex w-full items-center`}>
             <Avatar className="h-12 w-12">
                 <AvatarImage src={data.imageUrl} alt="Avatar" />
-                <AvatarFallback>{data.name[0]}</AvatarFallback>
+                <AvatarFallback className='text-lg'>{data.name[0]}</AvatarFallback>
             </Avatar>
             <div className="ml-4 space-y-1">
-                <p className="text-sm font-medium leading-none text-start">{data.name}</p>
+                <p className="text-base leading-none text-start font-semibold">{data.name}</p>
                 <p className="text-sm text-muted-foreground text-start">
                     {isTyping ? "typing" : item.lastMessage}
                 </p>

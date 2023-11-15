@@ -31,7 +31,7 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
     }
 
     const seenCount = () => {
-        return item.messages
+        return item.messages.filter((item) => item.memberId !== currentProfile.state.id)
             .filter((item) => item.seenBy
                 ?.some((id) => id.userId === currentProfile.state.id) !== true)
     }
@@ -89,10 +89,11 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
     }, [])
 
     // useEffect(() => {
-    //     if (searchParam === item.id) {
-    //         ChatPage(searchParam)
-    //     }
-    //     console.log("searchParam", searchParam)
+        // seenCount()
+        // if (searchParam === item.id) {
+        //     ChatPage(searchParam)
+        // }
+        // console.log("searchParam", searchParam)
     // }, [searchParam, scrollIntoView])
 
     return <Button onClick={() => ChatPage(item.id)}
@@ -102,10 +103,10 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
         <div className={`flex w-full items-center`}>
             <Avatar className="h-12 w-12">
                 <AvatarImage src={item.imageUrl} alt="Avatar" />
-                <AvatarFallback>{item.name[0]}</AvatarFallback>
+                <AvatarFallback className='text-lg'>{item.name[0]}</AvatarFallback>
             </Avatar>
             <div className="ml-4 space-y-1">
-                <p className="text-sm font-medium leading-none text-start">{item.name}</p>
+                <p className="text-base leading-none text-start font-semibold">{item.name}</p>
                 <p className="text-sm text-muted-foreground text-start">
                     {isTyping.typing ? `${findGroupUserName(isTyping.senderId)} is typing` : item.lastMessage}
                 </p>

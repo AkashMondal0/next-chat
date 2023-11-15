@@ -18,7 +18,11 @@ const GroupBody: FC<GroupBodyProps> = ({
 
     useEffect(() => {
         ref.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [scrollIntoView.state,data?.messages])
+    }, [scrollIntoView.state, data?.messages])
+
+    useEffect(() => {
+        ref.current?.scrollIntoView()
+    }, [data?.messages])
 
     return (
         <div className="p-4">
@@ -43,11 +47,11 @@ const GroupBody: FC<GroupBodyProps> = ({
                 {data?.messages?.map((message) => {
                     const member = data?.users?.find((user) => user.id === message.memberId)
                     return <GroupMessagesCard
-                    seen={message.seenBy?.length === data?.users?.length}
-                    profile={currentProfile.state.id === message.memberId}
-                    data={message}
-                    member={member}
-                    key={message.id} />
+                        seen={message.seenBy?.length === data?.users?.length}
+                        profile={currentProfile.state.id === message.memberId}
+                        data={message}
+                        member={member}
+                        key={message.id} />
                 })}
             </div>
             <div ref={ref} />

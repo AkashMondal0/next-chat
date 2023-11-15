@@ -3,7 +3,7 @@
 import { userData } from '@/api-functions/user';
 import useClientProfile from '@/hooks/client-profile';
 import useScrollToTop from '@/hooks/scrollToBottom';
-import { MessageDirect, User } from '@/interface/type';
+import { GroupMessage, MessageDirect, User } from '@/interface/type';
 import socket from '@/lib/socket';
 import { getCookie } from 'cookies-next';
 import { useSearchParams } from 'next/navigation';
@@ -15,7 +15,8 @@ const Client_Provider: FC<Client_ProviderProps> = ({
     children
 }) => {
     const currentProfile = useClientProfile()
-    const searchParam = useSearchParams().get("id")
+    const searchParamPrivate_id = useSearchParams().get("private_id")
+    // const searchParamGroup_id = useSearchParams().get("group_id")
     const scrollIntoView = useScrollToTop()
 
     const authFetch = async () => {
@@ -36,14 +37,14 @@ const Client_Provider: FC<Client_ProviderProps> = ({
         }
         socket.on('message_for_user', (data: MessageDirect) => {
             currentProfile.updateConversation(data)
-            if (data.conversationId === searchParam) {
+            if (data.conversationId === searchParamPrivate_id) {
                 scrollIntoView.setState()
             }
         })
         return () => {
             socket.off('message_for_user')
         }
-    }, [searchParam, currentProfile.state.id])
+    }, [searchParamPrivate_id, currentProfile.state.id])
 
     // if (error) {
     //     <div>User Fetch error</div>

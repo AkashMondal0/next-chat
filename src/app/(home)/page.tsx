@@ -54,6 +54,9 @@ export default function Index() {
               </>
               :
               <>
+                <div className="w-0 h-0 md:hidden">
+                  <Sidebar />
+                </div>
                 {/* group conversation */}
                 <GroupHeader data={groupConversation} />
                 <GroupBody data={groupConversation} />
