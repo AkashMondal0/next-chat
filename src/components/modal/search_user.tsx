@@ -5,7 +5,7 @@ import SearchCommand from '../shared/SearchCommand';
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { User } from '@/interface/type';
 import useClientProfile from '@/hooks/client-profile';
-import { Users } from 'lucide-react';
+import { UserPlus, UserPlus2, Users } from 'lucide-react';
 import { Button } from '../ui/button';
 import { getSearchUser } from '@/api-functions/user';
 
@@ -25,13 +25,14 @@ const SearchModal: FC<SearchModalProps> = () => {
   }
 
   useEffect(() => {
-    if(!mutation.data){
+    if (!mutation.data) {
       mutation.mutate()
     }
   }, [])
 
   return (<Modal title={"Search User"} trigger={<Button variant={"ghost"}>
-    <Users className='w-6 h-6 cursor-pointer' />
+    <UserPlus className='w-6 h-6 cursor-pointer' />
+
   </Button>}>
     <SearchCommand
       data={filterUser(mutation.data ? mutation.data : [])}

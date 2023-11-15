@@ -89,8 +89,10 @@ export default function Sidebar() {
                     </div>
                     <CardContent className='p-0'>
                         <div className='flex justify-between items-center w-full mb-2 px-4'>
+                            <div className='flex gap-1'>
                             <SearchModal />
                             <GroupCreateModal />
+                            </div>
                             <Button variant={"ghost"}><Bell className='w-6 h-6 cursor-pointer' /></Button>
                         </div>
                         <div className='px-2'>

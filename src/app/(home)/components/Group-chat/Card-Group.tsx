@@ -68,14 +68,13 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
                 scrollIntoView.setState()
             }
         })
-        socket.on('group_message_for_user_seen', (seen_data: GroupMessageSeenSocket) => {
-            if (seen_data.seenUserId !== currentProfile.state.id) {
-                currentProfile.groupMessageSeen(seen_data)
-            }
-        })
+        // socket.on('group_message_for_user_seen', (seen_data: GroupMessageSeenSocket) => {
+        //     if (seen_data.seenUserId !== currentProfile.state.id) {
+        //         // currentProfile.groupMessageSeen(seen_data)
+        //     }
+        // })
         socket.on('group_typing', (data_typing: typingState) => {
             if (data_typing.senderId !== currentProfile.state.id && data_typing.groupId === item.id) {
-                // console.log("data_typing", data_typing)
                 setIsTyping({
                     typing: data_typing.typing,
                     senderId: data_typing.senderId as string
@@ -89,11 +88,12 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
     }, [])
 
     // useEffect(() => {
-        // seenCount()
-        // if (searchParam === item.id) {
-        //     ChatPage(searchParam)
-        // }
-        // console.log("searchParam", searchParam)
+    //     if (searchParam === item.id) {
+    //         console.log("searchParam", searchParam)
+    //         if (seenCount().length > 0) {
+    //             mutation.mutate(seenCount().map((item) => item.id) as string[])
+    //         }
+    //     }
     // }, [searchParam, scrollIntoView])
 
     return <Button onClick={() => ChatPage(item.id)}

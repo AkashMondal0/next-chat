@@ -69,7 +69,7 @@ const GroupCreateModal: FC<GroupCreateModalProps> = () => {
   }
 
   return (<Modal title={"Create Group"} trigger={<Button variant={"ghost"}>
-    <UserPlus2 className='w-6 h-6 cursor-pointer' />
+    <Users className='w-6 h-6 cursor-pointer' />
   </Button>}>
     {mutationCreateGroup.isSuccess ?
       <>
