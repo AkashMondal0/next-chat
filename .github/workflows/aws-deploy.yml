@@ -1,0 +1,36 @@
+name: CICD
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        # docker build and push to docker hub
+      - name: Login To Docker Hub
+        run: sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Build the Docker socket image
+        run: sudo docker build -t akashmondal0/next-chat:latest .
+        
+      - name: Push the Docker image to the repository
+        run: sudo docker push akashmondal0/next-chat:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+
+      - name: Pull image from Docker Hub - socket
+        run: sudo docker pull akashmondal0/next-chat:latest
+
+      - name: delete previous container socket
+        run: sudo docker rm -f next-chat || true
+
+      - name: Run docker compose socket container
+        run: sudo docker run --restart=always --name next-chat -d -p 3003:3003 akashmondal0/next-chat:latest
+
+        # nginx configuration
+      - name: Reload nginx service
+        run: sudo systemctl reload nginx
