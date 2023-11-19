@@ -76,7 +76,7 @@ const GroupCreateModal: FC<GroupCreateModalProps> = () => {
         <div className="flex items-center justify-center">
           <Users className='w-12 h-12' />
         </div>
-        <div className="text-center text-2xl font-semibold">
+        <div className="text-center text-2xl font-semibold break-all">
           {`Your ${groupName} Group Created Successfully`}
         </div>
         <DialogClose onClick={() => {

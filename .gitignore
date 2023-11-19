@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+db_data
 # next.js
 /.next/
 /out/

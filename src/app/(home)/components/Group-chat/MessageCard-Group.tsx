@@ -20,12 +20,12 @@ const GroupMessagesCard: FC<GroupMessagesCardProps> = ({
     return (
         <div className={`my-3 flex items-center ${profile ? "justify-end" : " justify-start"}`}>
             <div className={`px-4 py-1 rounded-2xl border 
-            ${profile ? "bg-primary/90 text-primary-foreground" : "bg-accent"}`}>
-                <div>{`${profile ? "" : member?.name}`}</div>
-                <div className='flex items-center gap-4'>
-                    {data.content}
-                    <div className='flex gap-1 mt-3'>
-                        <div className='text-sm text-gray-500'>
+            ${profile ? "bg-primary/90 text-primary-foreground ml-8" : "bg-accent mr-8"}`}>
+                <div className='font-semibold'>{`${profile ? "" : member?.name}`}</div>
+                <div className=''>
+                    <p className='break-all'>{data.content}</p>
+                    <div className='flex gap-1 justify-end'>
+                        <div className={`text-sm text-gray-500 ${profile ? "prl-8" : "pr-8"}`}>
                             {new Date(data.createdAt as Date).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
                         </div>
                         {profile ? <div className='text-sm text-gray-500'>

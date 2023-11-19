@@ -42,7 +42,7 @@ const Header: FC<HeaderProps> = ({
                                     <AvatarImage src={userData.imageUrl} alt="Avatar" />
                                     <AvatarFallback>{userData.name[0]}</AvatarFallback>
                                 </Avatar>
-                                <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex">{userData?.name}</h1>
+                                <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex w-40 truncate">{userData?.name}</h1>
                             </div>
                         </>
                     </div>

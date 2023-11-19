@@ -37,9 +37,9 @@ const GroupHeader: FC<GroupHeaderProps> = ({
                                     <AvatarImage src={data.imageUrl} alt="Avatar" />
                                     <AvatarFallback>{data.name[0]}</AvatarFallback>
                                 </Avatar>
-                                <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex">
+                                <p className="text-xl font-bold text-gray-900 dark:text-gray-100 flex w-40 truncate">
                                     {data.name}
-                                </h1>
+                                </p>
                             </div>
                         </>
                     </div>

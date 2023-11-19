@@ -79,8 +79,8 @@ const UserCard = ({ item }: { item: Conversation }) => {
                 <AvatarFallback className='text-lg'>{data.name[0]}</AvatarFallback>
             </Avatar>
             <div className="ml-4 space-y-1">
-                <p className="text-base leading-none text-start font-semibold">{data.name}</p>
-                <p className="text-sm text-muted-foreground text-start">
+            <p className="text-base leading-none text-start font-semibold w-48 truncate">{data.name}</p>
+                <p className="text-sm text-muted-foreground text-start w-48 truncate">
                     {isTyping ? "typing" : item.lastMessage}
                 </p>
             </div>

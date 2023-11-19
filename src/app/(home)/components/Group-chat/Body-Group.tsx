@@ -5,6 +5,16 @@ import useClientProfile from '@/hooks/client-profile';
 import useScrollToTop from '@/hooks/scrollToBottom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import GroupMessagesCard from './MessageCard-Group';
+
+const dateFormat = (date: string | any) => {
+
+    if (!date) {
+        return ''
+    }
+
+    return new Date(date).toLocaleDateString("en-US",
+        { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', })
+}
 interface GroupBodyProps {
     data: Group | undefined
     scrollToBottom?: number
@@ -34,7 +44,7 @@ const GroupBody: FC<GroupBodyProps> = ({
                             <AvatarFallback>{data?.name[0]}</AvatarFallback>
                         </Avatar>
                     </div>
-                    <h3>
+                    <h3 className='break-all'>
                         {data?.name}
                     </h3>
                     <h6 className="font-normal">
@@ -44,15 +54,23 @@ const GroupBody: FC<GroupBodyProps> = ({
                 </div>
             </div>
             <div className='w-full'>
-                {data?.messages?.map((message) => {
-                    const member = data?.users?.find((user) => user.id === message.memberId)
-                    return <GroupMessagesCard
-                        seen={message.seenBy?.length === data?.users?.length}
-                        profile={currentProfile.state.id === message.memberId}
-                        data={message}
-                        member={member}
-                        key={message.id} />
-                })}
+                {data?.messages?.filter((value, index, dateArr) => index === dateArr
+                    .findIndex((time) => (dateFormat(time.createdAt) === dateFormat(value.createdAt)))) // this is dateARRAY day by day 
+                    .map((item, index) => {
+                        return <>
+                            <div className='w-full text-center m-2'>{dateFormat(item.createdAt)}</div>
+
+                            {data?.messages?.map((message) => {
+                                const member = data?.users?.find((user) => user.id === message.memberId)
+                                return <GroupMessagesCard
+                                    seen={message.seenBy?.length === data?.users?.length}
+                                    profile={currentProfile.state.id === message.memberId}
+                                    data={message}
+                                    member={member}
+                                    key={message.id} />
+                            })}
+                        </>
+                    })}
             </div>
             <div ref={ref} />
         </div>

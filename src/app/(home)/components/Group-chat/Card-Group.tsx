@@ -106,8 +106,8 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
                 <AvatarFallback className='text-lg'>{item.name[0]}</AvatarFallback>
             </Avatar>
             <div className="ml-4 space-y-1">
-                <p className="text-base leading-none text-start font-semibold">{item.name}</p>
-                <p className="text-sm text-muted-foreground text-start">
+                <p className="text-base leading-none text-start font-semibold w-48 truncate">{item.name}</p>
+                <p className="text-sm text-muted-foreground text-start w-48 truncate">
                     {isTyping.typing ? `${findGroupUserName(isTyping.senderId)} is typing` : item.lastMessage}
                 </p>
             </div>
