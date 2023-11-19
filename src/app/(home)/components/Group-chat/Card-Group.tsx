@@ -52,9 +52,9 @@ const GroupCard: React.FC<GroupCardProps> = ({ item }) => {
     const ChatPage = (RoomId: string) => {
         if (searchParam !== item.id) {
             router.replace(`?group_id=${RoomId}`)
-        }
-        if (seenCount().length > 0) {
-            mutation.mutate(seenCount().map((item) => item.id) as string[])
+            if (seenCount().length > 0) {
+                mutation.mutate(seenCount().map((item) => item.id) as string[])
+            }
         }
     }
 

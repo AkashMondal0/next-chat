@@ -32,9 +32,9 @@ export async function POST(req: NextRequest) {
                     }]
                 },
             },
-            // include: {
-            //     seenBy: true,
-            // },
+            include: {
+                seenBy: true,
+            },
         });
 
         if (!messageData) {
