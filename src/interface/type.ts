@@ -15,6 +15,11 @@ export type Notification = {
     createdAt: Date;
     updatedAt: Date;
   }
+
+  export type UserHistory = {
+    id: string;
+    searchUsers: User[];
+  }
   
   export type User = {
     id: string;
@@ -26,6 +31,7 @@ export type Notification = {
     cloudMessageId: string;
     notification: Notification[];
     conversations: Conversation[];
+    userHistory: UserHistory[];
     groups: Group[];
     createdAt: Date;
     updatedAt: Date;
@@ -39,6 +45,7 @@ export type Notification = {
     lastMessage: string;
     lastMessageTime: Date;
     messages: MessageDirect[];
+    type:"DIRECT" | "GROUP";
   }
   
   export type SeenBy = {
@@ -66,14 +73,17 @@ export type Notification = {
   export type Group = {
     id: string;
     name: string;
+    imageUrl: string;
     Members: Member[];
+    users: User[];
     createdAt: Date;
     updatedAt: Date;
     lastMessage: string;
     lastMessageTime: Date;
-    messages: Message[];
+    messages: GroupMessage[];
     author?: User;
     authorId?: string;
+    type:"DIRECT" | "GROUP";
   }
   
   enum MemberRole {
@@ -93,32 +103,33 @@ export type Notification = {
   }
   
   export type GroupSeenBy = {
-    id: string;
+    id?: string;
     userId: string;
-    messageId: string;
-    message: Message;
-    createdAt: Date;
-    updatedAt: Date;
+    messageId?: string;
+    message?: GroupMessage;
+    createdAt?: Date;
+    updatedAt?: Date;
     MessageDirect?: MessageDirect;
     messageDirectId?: string;
-    User: User;
+    User?: User;
   }
   
-  export type Message = {
-    id: string;
+  export type GroupMessage = {
+    id?: string;
     content: string;
     fileUrl?: string;
     memberId: string;
     groupId: string;
-    group: Group;
-    deleted: boolean;
-    seenBy: GroupSeenBy[];
-    createdAt: Date;
-    updatedAt: Date;
+    group?: Group;
+    deleted?: boolean;
+    seenBy?: GroupSeenBy[];
+    createdAt?: Date;
+    updatedAt?: Date;
   }
 
   export type typingState = {
     conversationId?: string,
+    groupId?: string,
     senderId?: string,
     receiverId?: string,
     typing: boolean

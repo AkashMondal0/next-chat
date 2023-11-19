@@ -15,7 +15,7 @@ import { Github } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { userLogin, userRegister } from "@/Query/user"
+import { userLogin, userRegister } from "@/api-functions/user"
 import { useToast } from "@/components/ui/use-toast"
 import useClientProfile from "@/hooks/client-profile"
 

@@ -1,70 +1,52 @@
 import { FC, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import useClientProfile from '@/hooks/client-profile';
-import { Conversation, MessageDirect, typingState } from '@/interface/type';
+import { Conversation, Group, GroupMessage, MessageDirect, typingState } from '@/interface/type';
 import { cn } from '@/lib/utils';
-import axios from "axios"
-import qs from "query-string"
 import { useMutation, useQuery } from '@tanstack/react-query'
 import socket from '@/lib/socket';
 import { Send } from 'lucide-react';
+import { sendGroupMessage } from '@/api-functions/group-chat';
 // import { pushNotification } from '@/Query/user';
-interface ChatFooterProps {
-    data: Conversation | undefined
+
+
+interface GroupFooterProps {
+    data: Group | undefined
 }
-const ChatFooter: FC<ChatFooterProps> = ({
+const GroupFooter: FC<GroupFooterProps> = ({
     data
 }) => {
     const currentProfile = useClientProfile()
-    let userData = data?.users.find((user) => user.id !== currentProfile.state.id)
     const [inputValue, setInputValue] = useState("")
 
     const postMessage = async () => {
-        const newMessage: MessageDirect = {
+        const newMessage: GroupMessage = {
             content: inputValue,
             memberId: currentProfile.state.id,
             fileUrl: '',
-            conversationId: data?.id || ""
+            groupId: data?.id as string,
         }
         setInputValue("")
-        const url = qs.stringifyUrl({
-            url: "/api/chat/direct/message/send",
-            query: {
-                receiverId: userData?.id,
-            }
-        });
-        let res = await axios.post(url, newMessage)
-        
-        // send notification
-        // const dataPush = {
-        //     registrationToken: currentProfile.state.cloudMessageId,
-        //     title: `${currentProfile.state.name} sent you a message`,
-        //     body: inputValue,
-        //     imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Olivia_Rodrigo_with_Dr_Fauci_1.png/640px-Olivia_Rodrigo_with_Dr_Fauci_1.png"
-        // }
-        // pushNotification(dataPush)
+        let res = await sendGroupMessage(newMessage)
         return res
     }
 
     const isTyping = () => {
-
         const message: typingState = {
-            conversationId: data?.id,
+            groupId: data?.id,
             senderId: currentProfile.state.id,
-            receiverId: userData?.id,
             typing: true
         }
-        socket.emit('_typing', message)
+        socket.emit('group_typing', message)
     }
 
     const stopTyping = () => {
         const message: typingState = {
-            conversationId: data?.id,
+            groupId: data?.id,
             senderId: currentProfile.state.id,
-            receiverId: userData?.id,
             typing: false
         }
-        socket.emit('_typing', message)
+        socket.emit('group_typing', message)
     }
 
     const mutation = useMutation({ mutationFn: postMessage })
@@ -90,4 +72,4 @@ const ChatFooter: FC<ChatFooterProps> = ({
     );
 };
 
-export default ChatFooter;
+export default GroupFooter;

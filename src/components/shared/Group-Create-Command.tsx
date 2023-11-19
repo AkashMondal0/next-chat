@@ -11,25 +11,32 @@ import {
 } from "@/components/ui/command"
 import { User, search_data_user } from "@/interface/type"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Loader2, UserCheck, UserPlus } from "lucide-react"
-import axios from "axios"
-import { useMutation, useQuery } from '@tanstack/react-query'
-import qs from "query-string"
-import useClientProfile from "@/hooks/client-profile"
-import { addFriendToConversation } from "@/api-functions/direct-chat"
+import { Check, Loader2 } from "lucide-react"
+import { Button } from "../ui/button"
+import { Checkbox } from "../ui/checkbox"
+
 
 interface SearchCommandProps {
   data: User[] | undefined
   secondaryData?: search_data_user[]
   status?: boolean
   error?: any
+  addUserToGroupHandler: (id: User["id"]) => void
+  addUserToGroup: User["id"][]
+  removeUserFromGroupHandler: (id: User["id"]) => void
+  Action?: React.ReactNode
 }
-export default function SearchCommand({
+export default function Group_Create_Command({
   data,
   secondaryData,
   status,
-  error
+  error,
+  addUserToGroupHandler,
+  addUserToGroup,
+  removeUserFromGroupHandler,
+  Action
 }: SearchCommandProps) {
+
   return (
     <Command className="rounded-lg border shadow-md">
       <CommandInput placeholder="Type a command or search..." />
@@ -38,7 +45,11 @@ export default function SearchCommand({
         <CommandGroup heading="Result">
           {status ?
             <Loader2 className='animate-spin text-zinc-500 mx-auto w-16 h-16 mb-8' /> :
-            <>{data?.map((item, index) => <UserItem key={item.id} data={item} />)}</>}
+            <>{data?.map((item, index) => <UserItem
+              addUserToGroupHandler={addUserToGroupHandler}
+              removeUserFromGroupHandler={removeUserFromGroupHandler}
+              addUserToGroup={addUserToGroup}
+              key={item.id} data={item} />)}</>}
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Suggestions">
@@ -56,20 +67,20 @@ export default function SearchCommand({
   )
 }
 
+interface UserItemProps {
+  data: User
+  addUserToGroupHandler: (id: User["id"]) => void
+  addUserToGroup: User["id"][]
+  removeUserFromGroupHandler: (id: User["id"]) => void
+}
 
-const UserItem = ({ data }: { data: search_data_user }) => {
+const UserItem: React.FC<UserItemProps> = ({ data,
+  removeUserFromGroupHandler,
+  addUserToGroupHandler, addUserToGroup }) => {
 
-  const currentProfile = useClientProfile()
-
-  const addFriend = async () => {
-    let res = await addFriendToConversation(currentProfile.state.id,data.id)
-    return res
-  }
-  
-  const mutation = useMutation({ mutationFn: addFriend })
 
   return (
-    <CommandItem className="h-12 my-2 flex justify-between">
+    <CommandItem className="h-12 my-2 flex justify-between" >
       <div className="flex items-center">
         {data.imageUrl && (<Avatar className="h-10 w-10 mr-2">
           <AvatarImage src={data.imageUrl} alt="Avatar" />
@@ -78,11 +89,23 @@ const UserItem = ({ data }: { data: search_data_user }) => {
         <span>{data.name}</span>
       </div>
       <>
-        {mutation.isPending ?
-          <Loader2 className='animate-spin text-zinc-500 ml-auto w-6 h-6 mr-2' />
-          : mutation.isSuccess ? <UserCheck className="mx-2 cursor-pointer" />
-            : <UserPlus className="mx-2 cursor-pointer" onClick={() => mutation.mutate()} />}
-      </>
+        <Checkbox className=" 
+        text-zinc-500
+        border-zinc-500
+        hover:border-zinc-600
+        focus:border-zinc-600
+        focus:ring-zinc-500
+        focus:ring-2
+        rounded-full
+        w-6
+        h-6"
+          checked={addUserToGroup.includes(data.id)}
+          onClick={() => {
+            addUserToGroup.includes(data.id) ?
+              removeUserFromGroupHandler(data.id) :
+              addUserToGroupHandler(data.id)
+          }}
+        /></>
     </CommandItem>
   )
 }
