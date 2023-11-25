@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: next-chat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: next-chat
+  template:
+    metadata:
+      labels:
+        app: next-chat
+    spec:
+      containers:
+        - name: next-chat
+          image: akashmondal0/next-chat:latest
+          env:
+          - name: DATABASE_URL
+            value: mysql://root:akash@2003@localhost:3306/chatapp
+          - name: NEXT_PUBLIC_SOCKET_URL 
+            value: http://locahost:3003
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: next-chat
+spec:
+  selector:
+    app: next-chat
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: NodePort
