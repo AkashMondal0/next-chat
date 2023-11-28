@@ -1,21 +1,7 @@
 FROM node:latest
-
-# ENV AUTH0_SECRET='1634f2f68b70159be9bfe39e537e888eea6a89ef6aa65069d960974f9f0a9386'
-# ENV AUTH0_BASE_URL='https://chat.skysolo.me/'
-# ENV AUTH0_ISSUER_BASE_URL='https://dev-78ex66q2k1vd3drm.us.auth0.com'
-# ENV AUTH0_CLIENT_ID='PqiBH5cpTk8bs9bsTDDb7wN87EL3I2J0'
-# ENV AUTH0_CLIENT_SECRET='wJOlXHB9NeNGuEn_ldGrW3xXNzbF6I-g4H0cXUnIZE9yFVMxAwCtEvthStHOVFMH'
  
 ENV DATABASE_URL="mysql://root:akash2003@13.126.179.239:3306/chatapp"
 ENV SOCKET_URL=https://socket.skysolo.me/
-
-# dev
-# ENV # DATABASE_URL="mysql://root:akash@2003@192.168.31.232:3306/chatapp"
-# ENV AUTH0_SECRET='1634f2f68b70159be9bfe39e537e888eea6a89ef6aa65069d960974f9f0a9386'
-# ENV AUTH0_BASE_URL='http://localhost:3000/'
-# ENV AUTH0_ISSUER_BASE_URL='https://dev-78ex66q2k1vd3drm.us.auth0.com'
-# ENV AUTH0_CLIENT_ID='KZbDYSn2F78k3QCxwNaRDpVeybl8Gwif'
-# ENV AUTH0_CLIENT_SECRET='7YnYQqNKRe6DqBdAJj9DUv-eT48tjK8y7F-BsbpzYGsxk0wEZ8a98cTZLGqpOEt5'
 
 WORKDIR /app
 COPY . .
