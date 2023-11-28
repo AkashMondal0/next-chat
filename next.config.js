@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-  // webpack5: true,
   reactStrictMode: true,
   webpack: (config) => {
     config.externals.push({

@@ -14,13 +14,6 @@ CREATE TABLE `Notification` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `UserHistory` (
-    `id` VARCHAR(191) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `User` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
@@ -36,6 +29,7 @@ CREATE TABLE `User` (
 
     UNIQUE INDEX `User_email_key`(`email`),
     INDEX `User_userId_idx`(`userId`),
+    INDEX `User_id_idx`(`id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -83,6 +77,7 @@ CREATE TABLE `MessageDirect` (
 CREATE TABLE `Group` (
     `id` VARCHAR(191) NOT NULL,
     `name` TEXT NOT NULL,
+    `imageUrl` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `lastMessage` TEXT NOT NULL,
@@ -121,7 +116,7 @@ CREATE TABLE `GroupSeenBy` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Message` (
+CREATE TABLE `GroupMessage` (
     `id` VARCHAR(191) NOT NULL,
     `content` TEXT NOT NULL,
     `fileUrl` TEXT NULL,
@@ -131,7 +126,7 @@ CREATE TABLE `Message` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    INDEX `Message_groupId_idx`(`groupId`),
+    INDEX `GroupMessage_groupId_idx`(`groupId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

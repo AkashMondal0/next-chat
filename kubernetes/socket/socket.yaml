@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: socket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: socket
+  template:
+    metadata:
+      labels:
+        app: socket
+    spec:
+      containers:
+        - name: socket
+          image: akashmondal0/socket-next-chat:latest
+          ports:
+            - containerPort: 3003
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: socket
+spec:
+  selector:
+    app: socket
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003
+      nodePort: 30007
+  type: NodePort
