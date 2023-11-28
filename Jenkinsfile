@@ -24,7 +24,7 @@ pipeline {
             }
             steps {
                 echo 'building the scoket-next-chat image'
-                sh "docker build -t akashmondal0/socket-next-chat:latest ."
+                sh "cd socket-chat-api && docker build -t akashmondal0/socket-next-chat:latest ."
             }
         }
         stage('push docker hub') {
