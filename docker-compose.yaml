@@ -38,11 +38,11 @@ services:
   next-chat-socket:
      depends_on:
        - db
-    #  image: akashmondal0/socket-next-chat:latest
-     build:
-      context: ./socket-api
-      dockerfile: dockerfile
-     container_name: socket-container
+     image: akashmondal0/socket-next-chat:latest
+    #  build:
+    #   context: ./socket-api
+    #   dockerfile: dockerfile
+    #  container_name: socket-container
      ports:
        - "3003:3003"
      volumes:

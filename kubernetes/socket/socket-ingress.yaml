@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: socket-ingress
+spec:
+  rules:
+  - host: "socket.skysolo.me"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: socket-app
+            port:
+              number: 3003
+  - host: "*.socket.me"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: socket-app
+            port:
+              number: 3003
