@@ -35,11 +35,11 @@ pipeline {
                 sh "docker build -t akashmondal0/socket-next-chat:latest ."
             }
         }
-        stage('minikube start') {
-            steps {
-                sh "minikube start --driver=docker"
-            }
-        }
+        // stage('minikube start') {
+        //     steps {
+        //         sh "minikube start --driver=docker"
+        //     }
+        // }
         stage('configure mysql database deployment file') {
             steps {
                 sh "cd /kubernetes/mysql && kubectl apply -f mysql.yaml && kubectl apply -f mysql-vc.yaml && kubectl port-forward svc/mysql 3306:3306 --address 0.0.0.0"
