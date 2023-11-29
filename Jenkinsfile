@@ -42,17 +42,17 @@ pipeline {
         }
         stage('configure mysql database deployment file') {
             steps {
-                sh "cd /kubernetes/mysql && kubectl apply -f mysql.yaml && kubectl apply -f mysql-vc.yaml && kubectl port-forward svc/mysql 3306:3306 --address 0.0.0.0"
+                sh "cd kubernetes/mysql && kubectl apply -f mysql.yaml && kubectl apply -f mysql-vc.yaml && kubectl port-forward svc/mysql 3306:3306 --address 0.0.0.0"
             }
         }
         stage('configure socket deployment file') {
             steps {
-                sh "cd /kubernetes/socket && kubectl apply -f socket.yaml && kubectl port-forward svc/socket 3003:3003 --address 0.0.0.0"
+                sh "cd kubernetes/socket && kubectl apply -f socket.yaml && kubectl port-forward svc/socket 3003:3003 --address 0.0.0.0"
             }
         }
         stage('configure app deployment file') {
              steps {
-                sh "cd /kubernetes/app && kubectl apply -f app.yaml && kubectl port-forward svc/next-chat 3000:3000 --address 0.0.0.0"
+                sh "cd kubernetes/app && kubectl apply -f app.yaml && kubectl port-forward svc/next-chat 3000:3000 --address 0.0.0.0"
             }
         }
     }
