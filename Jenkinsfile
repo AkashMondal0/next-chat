@@ -37,7 +37,7 @@ pipeline {
         }
         stage('minikube start') {
             steps {
-                sh "minikube start"
+                sh "minikube start --driver=docker"
             }
         }
         stage('configure mysql database deployment file') {

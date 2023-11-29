@@ -7,6 +7,10 @@
 
 # local setup
 
+# jenkins
+
+# kubernetes
+
 ```
 npm i
 
