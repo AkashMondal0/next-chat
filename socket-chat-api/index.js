@@ -94,6 +94,20 @@ socketIO.on('connection', (socket) => {
     socketIO.to(senderId).emit('group_chat_list', data);
   });
 
+  // private video call -------------------------------
+  socket.on('video_call_request', (_data) => {
+    const { receiverId, senderId, conversationId,offer } = _data;
+
+    socketIO.to(receiverId).emit('video_call_request', _data);
+  });
+
+  socket.on('video_call_answer', (_data) => {
+    const { receiverId, senderId, conversationId,offer } = _data;
+
+    socketIO.to(receiverId).emit('video_call_answer', _data);
+  });
+
+
   // socket.on('disconnect', () => {
   //   console.log('user disconnected');
   // });

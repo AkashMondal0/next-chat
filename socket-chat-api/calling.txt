@@ -1,0 +1,21 @@
+socket.on("join", (roomName) => {
+    });
+  
+    // Triggered when the person who joined the room is ready to communicate.
+    socket.on("ready", (roomName) => {
+    });
+  
+    // Triggered when server gets an icecandidate from a peer in the room.
+    socket.on("ice-candidate", (candidate, roomName: string) => {
+    });
+  
+    // Triggered when server gets an offer from a peer in the room.
+    socket.on("offer", (offer, roomName) => {
+    });
+  
+    // Triggered when server gets an answer from a peer in the room
+    socket.on("answer", (answer, roomName) => {
+    });
+
+    socket.on("leave", (roomName) => {
+    });

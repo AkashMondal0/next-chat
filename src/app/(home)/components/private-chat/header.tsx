@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { cn } from '@/lib/utils';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { ModeToggle } from '@/components/shared/ToggleTheme';
 import { Conversation } from '@/interface/type';
 import useClientProfile from '@/hooks/client-profile';
@@ -9,9 +9,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { SheetSide } from '@/components/shared/Sheet';
 import Sidebar from '@/app/(home)/components/sidebar';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Menu } from 'lucide-react';
+import { ChevronLeft, Menu, Phone, Video } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import useVideoCalling from '@/hooks/video-call';
+import socket from '@/lib/socket';
+import { PeerContext } from '@/components/provider/web-rtc_Provider';
 
 interface HeaderProps {
     data: Conversation | undefined
@@ -21,8 +24,20 @@ const Header: FC<HeaderProps> = ({
     data
 }) => {
     const currentProfile = useClientProfile()
+    const usePeer = useContext(PeerContext)
     const router = useRouter()
     let userData = data?.users.find((user) => user.id !== currentProfile.state.id)
+
+
+    const videoCalling = async () => {
+        const offer = await usePeer.createOffer()
+        socket.emit('video_call_request', {
+            senderId: currentProfile.state.id,
+            receiverId: userData?.id,
+            conversationId: data?.id,
+            offer
+        })
+    }
 
     return (
         <div className={cn('navbar-blur', "w-full h-16 top-0 z-50 px-2 sticky")}>
@@ -59,11 +74,23 @@ const Header: FC<HeaderProps> = ({
                     {/*  */}
                     {/* mode toggle */}
                     <div className='md:hidden flex'>
+                        <Button variant="outline" className='rounded-full' size="icon">
+                            <Phone />
+                        </Button>
+                        <Button variant="outline" className='rounded-full' size="icon">
+                            <Video />
+                        </Button>
                         <ModeToggle />
                     </div>
                 </div>
                 {/*  */}
-                <div className='hidden md:flex'>
+                <div className='hidden md:flex items-center gap-3'>
+                    <Button variant="outline" className='rounded-full' size="icon">
+                        <Phone />
+                    </Button>
+                    <Button onClick={videoCalling} variant="outline" className='rounded-full' size="icon">
+                        <Video />
+                    </Button>
                     <ModeToggle />
                 </div>
             </div>

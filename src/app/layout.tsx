@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import React_Query from '@/components/provider/React-Query_Provider'
 import { Metadata } from 'next'
 import { Toaster } from '@/components/ui/toaster'
+import Web_RtcProvider from '@/components/provider/web-rtc_Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,8 +30,10 @@ export default async function RootLayout({
           attribute='class'
           storageKey="theme">
           <React_Query>
-            <Toaster />
-            {children}
+            <Web_RtcProvider>
+              <Toaster />
+              {children}
+            </Web_RtcProvider>
           </React_Query>
         </ThemeProvider>
       </body>
