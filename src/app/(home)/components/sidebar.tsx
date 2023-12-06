@@ -21,9 +21,14 @@ import GroupCreateModal from '@/components/modal/GroupCreate';
 import UserCard from './private-chat/User-Card';
 import { getGroupConversation } from '@/api-functions/group-chat';
 import GroupCard from './Group-chat/Card-Group';
+import { useSelector, useDispatch } from 'react-redux'
+import { setConversation, insertMessageToConversation } from '@/redux/slices/conversation'
+import { RootState } from '@/redux/store';
 
 export default function Sidebar() {
     const currentProfile = useClientProfile()
+    const conversationState = useSelector((state: RootState) => state.conversation)
+    const dispatch = useDispatch()
 
     const getPrivateConversationList = async () => {
         let data = await getUserConversation(currentProfile.state.id)
@@ -62,6 +67,7 @@ export default function Sidebar() {
     useEffect(() => {
         if (data) {
             currentProfile.setConversations(data as Conversation[])
+            dispatch(setConversation(data))
         }
         if (GroupConversationList.data) {
             currentProfile.setGroups(GroupConversationList.data as Group[])
@@ -72,13 +78,13 @@ export default function Sidebar() {
         socket.on('group_chat_list', () => {
             GroupConversationList.refetch()
         })
+        // console.log(conversationState)
         return () => {
             socket.off('user_chat_list')
             socket.off('group_chat_list')
         }
     }, [data, GroupConversationList.data])
 
-    // console.log(GroupConversationList.data)
     return (
         <div>
             <Card className="col-span-3 border-none">
@@ -90,8 +96,8 @@ export default function Sidebar() {
                     <CardContent className='p-0'>
                         <div className='flex justify-between items-center w-full mb-2 px-4'>
                             <div className='flex gap-1'>
-                            <SearchModal />
-                            <GroupCreateModal />
+                                <SearchModal />
+                                <GroupCreateModal />
                             </div>
                             <Button variant={"ghost"}><Bell className='w-6 h-6 cursor-pointer' /></Button>
                         </div>
@@ -105,7 +111,7 @@ export default function Sidebar() {
                                     ?.map((item: any | Conversation | Group, i) => {
                                         return <>{item.type === "DIRECT" ?
                                             <UserCard key={item.id} item={item} /> :
-                                             <GroupCard item={item} key={item.id} />
+                                            <GroupCard item={item} key={item.id} />
                                         }</>
                                     })}
                             </>

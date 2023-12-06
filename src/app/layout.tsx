@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import React_Query from '@/components/provider/React-Query_Provider'
 import { Metadata } from 'next'
 import { Toaster } from '@/components/ui/toaster'
+import ReduxToolkit_Provider from '@/components/provider/Redux-Toolkit_Provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,10 +29,12 @@ export default async function RootLayout({
           enableSystem
           attribute='class'
           storageKey="theme">
-          <React_Query>
-            <Toaster />
-            {children}
-          </React_Query>
+          <ReduxToolkit_Provider>
+            <React_Query>
+              <Toaster />
+              {children}
+            </React_Query>
+          </ReduxToolkit_Provider>
         </ThemeProvider>
       </body>
     </html>
